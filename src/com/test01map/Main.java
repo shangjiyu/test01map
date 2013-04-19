@@ -3,12 +3,14 @@ package com.test01map;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PointF;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,7 +24,6 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.google.android.maps.GeoPoint;
-import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
@@ -34,7 +35,7 @@ import com.test01map.overlay.MarkerOverlay;
 import com.test01map.overlay.PolygonOverlay;
 import com.test01map.tools.Conversion;
 
-public class Main extends MapActivity implements LocationCallBack,
+public class Main extends Activity implements LocationCallBack,
 		OnClickListener {
 
 	private MyLocationManager mylocation;
@@ -163,7 +164,6 @@ public class Main extends MapActivity implements LocationCallBack,
 		super.onResume();
 	}
 
-	@Override
 	protected boolean isRouteDisplayed() {
 		return false;
 	}
