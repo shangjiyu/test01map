@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <com.google.android.maps.MapView
+        android:id="@+id/mapview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:apiKey="AIzaSyCFFfWHz4m2slrs2kLhmLGaUiQTfKaRE9A"
+        android:clickable="true"
+        android:enabled="true" />
+
+    <LinearLayout
+        android:id="@+id/DistanceTextLayout"
+        android:layout_width="178dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5.0px"
+        android:layout_x="142dp"
+        android:layout_y="2dp"
+        android:background="@drawable/buttons_background"
+        android:gravity="right"
+        android:orientation="horizontal"
+        android:padding="3.0px"
+        android:weightSum="1.0" >
+
+        <TextView
+            android:id="@+id/Distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5.0px"
+            android:layout_weight="0.98"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:gravity="left"
+            android:padding="3.0dip"
+            android:text="@string/distance"
+            android:textColor="#ffffffff"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/AreaTextLayout"
+        android:layout_width="178dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5.0px"
+        android:layout_x="142dp"
+        android:layout_y="38dp"
+        android:background="@drawable/buttons_background"
+        android:gravity="right"
+        android:orientation="horizontal"
+        android:padding="3.0px"
+        android:weightSum="1.0" >
+
+        <TextView
+            android:id="@+id/Area"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5.0px"
+            android:layout_weight="0.97"
+            android:background="@android:color/transparent"
+            android:gravity="left"
+            android:padding="1.0dip"
+            android:text="@string/area"
+            android:textColor="#ffffffff"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ButtonLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="108dp"
+        android:layout_marginTop="5.0px"
+        android:layout_x="281dp"
+        android:layout_y="280dp"
+        android:background="@drawable/buttons_background"
+        android:gravity="right"
+        android:orientation="vertical"
+        android:padding="3.0px" >
+
+        <ImageButton
+            android:id="@+id/delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:src="@drawable/deletexml" />
+
+        <ImageButton
+            android:id="@+id/clear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:src="@drawable/clearpress"
+             />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ButtonLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="120dp"
+        android:layout_marginTop="5.0px"
+        android:layout_x="281dp"
+        android:layout_y="146dp"
+        android:background="@drawable/buttons_background"
+        android:gravity="right"
+        android:orientation="vertical"
+        android:padding="3.0px"
+        android:weightSum="2.0" >
+
+        <ToggleButton
+            android:id="@+id/toggleButton0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/toggleselector0"
+            android:checked="true"
+            android:textOff=""
+            android:textOn="" />
+
+        <ToggleButton
+            android:id="@+id/toggleButton1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/toggleselector1"
+            android:checked="true"
+            android:textOff=""
+            android:textOn="" />
+
+        <ToggleButton
+            android:id="@+id/toggleButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/toggleselector2"
+            android:checked="true"
+            android:textOff=""
+            android:textOn="" />
+    </LinearLayout>
+
+</AbsoluteLayout>

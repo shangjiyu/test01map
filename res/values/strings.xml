@@ -1,0 +1,12 @@
+<resources>
+
+    <string name="app_name">test01map</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">Main</string>
+    <string name="distance">D:0m</string>
+    <string name="area">A:0sq.m</string>
+    <string name="start">启动服务</string>
+    <string name="stop">停止服务</string>
+
+</resources>
