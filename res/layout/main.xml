@@ -4,18 +4,18 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
-    <!-- <com.google.android.maps.MapView
+    <com.google.android.gms.maps.MapView
         android:id="@+id/mapview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:apiKey="AIzaSyBwwSr2U_1H_Ko9bpTHkTmKQtE3fmVeocw"
         android:clickable="true"
-        android:enabled="true" /> -->
-	<fragment
+        android:enabled="true" />
+	<!-- <fragment
 	  android:id="@+id/mapview"
 	  android:layout_width="match_parent"
 	  android:layout_height="match_parent"
-	  class="com.google.android.gms.maps.MapFragment"/>
+	  class="com.google.android.gms.maps.MapFragment"/> -->
 
     <LinearLayout
         android:id="@+id/DistanceTextLayout"

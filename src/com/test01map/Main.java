@@ -25,8 +25,17 @@ import android.widget.ToggleButton;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapController;
-import com.google.android.maps.MapView;
+import com.google.android.gms.internal.af.c;
+import com.google.android.gms.internal.co;
+//import com.google.android.maps.MapView;
+import com.google.android.gms.maps.MapView;
 import com.google.android.maps.Overlay;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import com.test01map.MyLocationManager.LocationCallBack;
 import com.test01map.caculation.CaculationArea;
 import com.test01map.caculation.CaculationDistance;
@@ -48,6 +57,7 @@ public class Main extends Activity implements LocationCallBack,
 	boolean addpoint = false;
 
 	MapView mapView;
+//	GoogleMap mapView
 	MapOverlay mapOverlay;
 	PointF pointF, pointFGps;
 
@@ -88,17 +98,20 @@ public class Main extends Activity implements LocationCallBack,
 		TextArea = (TextView) findViewById(R.id.Area);
 
 		mapView = (MapView) findViewById(R.id.mapview);
-		mapView.setSatellite(false);
+		/*mapView.setSatellite(false);
 		mapView.setTraffic(true);
-		mapView.setBuiltInZoomControls(true);
+		mapView.setBuiltInZoomControls(true);*/
+		GoogleMap map = (GoogleMap)mapView.getMap();
+		map.setMapType(map.MAP_TYPE_SATELLITE);
+		map.getUiSettings().setZoomControlsEnabled(true);
 		mapView.setClickable(true);
 		mapView.setEnabled(true);
 
-		mapController = mapView.getController();
-		mapController.setZoom(3);
-
+		/*mapController = mapView.getController();
+		mapController.setZoom(3);*/
+		map.animateCamera(CameraUpdateFactory.zoomTo(3), null);
+		
 		mapOverlay = new MapOverlay();
-
 		listOfOverlays = mapView.getOverlays();
 		listOfOverlays.clear();
 		listOfOverlays.add(mapOverlay);
@@ -258,12 +271,15 @@ public class Main extends Activity implements LocationCallBack,
 	class toggleButton0Listener implements OnCheckedChangeListener {
 		public void onCheckedChanged(CompoundButton buttonView,
 				boolean isChecked) {
+			GoogleMap map = (GoogleMap)mapView.getMap();
 			if (isChecked) {
-				mapView.setSatellite(false);
-				mapView.setTraffic(true);
+//				mapView.setSatellite(false);
+				map.setMapType(map.MAP_TYPE_NORMAL);
+//				mapView.setTraffic(true);
 			} else {
-				mapView.setSatellite(true);
-				mapView.setTraffic(false);
+//				mapView.setSatellite(true);
+//				mapView.setTraffic(false);
+				map.setMapType(map.MAP_TYPE_SATELLITE);
 
 			}
 
