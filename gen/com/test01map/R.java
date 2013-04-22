@@ -163,8 +163,9 @@ containing a value of this type.
         public static final int delete=0x7f04000c;
         public static final int hybrid=0x7f040004;
         public static final int main=0x7f040005;
+        public static final int mapFragment=0x7f040011;
         public static final int mapview=0x7f040006;
-        public static final int menu_settings=0x7f040011;
+        public static final int menu_settings=0x7f040012;
         public static final int none=0x7f040000;
         public static final int normal=0x7f040001;
         public static final int satellite=0x7f040002;
@@ -175,6 +176,7 @@ containing a value of this type.
     }
     public static final class layout {
         public static final int main=0x7f030000;
+        public static final int mapfragment=0x7f030001;
     }
     public static final class menu {
         public static final int main=0x7f080000;

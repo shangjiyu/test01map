@@ -25,6 +25,7 @@ import android.widget.ToggleButton;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapController;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.internal.af.c;
 import com.google.android.gms.internal.co;
 //import com.google.android.maps.MapView;
@@ -32,16 +33,16 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+//import com.google.android.gms.maps.SupportMapFragment;
+//import com.google.android.gms.maps.model.LatLng;
+//import com.google.android.gms.maps.model.MarkerOptions;
 
 import com.test01map.MyLocationManager.LocationCallBack;
 import com.test01map.caculation.CaculationArea;
 import com.test01map.caculation.CaculationDistance;
-import com.test01map.overlay.LineOverlay;
-import com.test01map.overlay.MarkerOverlay;
-import com.test01map.overlay.PolygonOverlay;
+//import com.test01map.overlay.LineOverlay;
+//import com.test01map.overlay.MarkerOverlay;
+//import com.test01map.overlay.PolygonOverlay;
 import com.test01map.tools.Conversion;
 
 public class Main extends Activity implements LocationCallBack,
@@ -96,12 +97,13 @@ public class Main extends Activity implements LocationCallBack,
 
 		TextDistance = (TextView) findViewById(R.id.Distance);
 		TextArea = (TextView) findViewById(R.id.Area);
-
+		
+		GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
 		mapView = (MapView) findViewById(R.id.mapview);
 		/*mapView.setSatellite(false);
 		mapView.setTraffic(true);
 		mapView.setBuiltInZoomControls(true);*/
-		GoogleMap map = (GoogleMap)mapView.getMap();
+		GoogleMap map = (GoogleMap) mapView.getMap();
 		map.setMapType(map.MAP_TYPE_SATELLITE);
 		map.getUiSettings().setZoomControlsEnabled(true);
 		mapView.setClickable(true);
