@@ -112,7 +112,7 @@ public class Main extends Activity implements LocationCallBack,
 		map.animateCamera(CameraUpdateFactory.zoomTo(3), null);
 		
 		mapOverlay = new MapOverlay();
-		listOfOverlays = mapView.getOverlays();
+//		listOfOverlays = mapView.getOverlays();
 		listOfOverlays.clear();
 		listOfOverlays.add(mapOverlay);
 
@@ -187,7 +187,7 @@ public class Main extends Activity implements LocationCallBack,
 			pointF = new PointF(p.getLatitudeE6(), p.getLongitudeE6());
 			listpoint.add(pointF);
 			geopoints.add(p);
-			removeOverlay();
+//			removeOverlay();
 			overlayAndtextShow();
 			addpoint = false;
 			mapController.animateTo(p);
@@ -202,7 +202,7 @@ public class Main extends Activity implements LocationCallBack,
 			if (!listpoint.isEmpty()) {
 				listpoint.remove(listpoint.size() - 1);
 				geopoints.remove(geopoints.size() - 1);
-				removeOverlay();
+//				removeOverlay();
 				overlayAndtextShow();
 			} else {
 				Toast.makeText(MyApplication.getInstance(), "no point",
@@ -213,7 +213,7 @@ public class Main extends Activity implements LocationCallBack,
 			if (!listpoint.isEmpty()) {
 				listpoint.clear();
 				geopoints.clear();
-				removeOverlay();
+//				removeOverlay();
 				overlayAndtextShow();
 			} else {
 				Toast.makeText(MyApplication.getInstance(), "no point",
@@ -233,12 +233,12 @@ public class Main extends Activity implements LocationCallBack,
 		pointFGps = new PointF(pGps.getLatitudeE6(), pGps.getLongitudeE6());
 		listpoint.add(pointFGps);
 		geopoints.add(pGps);
-		removeOverlay();
-		overlayAndtextShow();
+//		removeOverlay();
+//		overlayAndtextShow();
 
 	}
 
-	void removeOverlay() {
+	/*void removeOverlay() {
 		if (4 == mapView.getOverlays().size()) {
 			mapView.getOverlays().remove(3);
 			mapView.getOverlays().remove(2);
@@ -247,13 +247,13 @@ public class Main extends Activity implements LocationCallBack,
 			mapView.getOverlays().remove(2);
 			mapView.getOverlays().remove(1);
 		}
-	}
+	}*/
 
 	void overlayAndtextShow() {
-		mapView.getOverlays().add(new LineOverlay(geopoints));
-		mapView.getOverlays().add(new MarkerOverlay(geopoints));
+//		mapView.getOverlays().add(new LineOverlay(geopoints));
+//		mapView.getOverlays().add(new MarkerOverlay(geopoints));
 		if (Polygon) {
-			mapView.getOverlays().add(new PolygonOverlay(geopoints));
+//			mapView.getOverlays().add(new PolygonOverlay(geopoints));
 			dStr = Conversion.ConversionA(CaculationArea.calculateArea(listpoint));
 			TextArea.setText("A:" + dStr);
 		}	
@@ -304,12 +304,12 @@ public class Main extends Activity implements LocationCallBack,
 				boolean isChecked) {
 			if (isChecked) {
 				Polygon = false;
-				removeOverlay();
+//				removeOverlay();
 				overlayAndtextShow();
 				TextArea.setText("A:0sq.m");
 			} else {
 				Polygon = true;
-				mapView.getOverlays().add(new PolygonOverlay(geopoints));
+//				mapView.getOverlays().add(new PolygonOverlay(geopoints));
 				dStr = Conversion.ConversionA(CaculationArea.calculateArea(listpoint));
 				TextArea.setText("A:" + dStr);
 			}
