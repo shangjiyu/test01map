@@ -10,7 +10,7 @@ import android.widget.Button;
 
 public class StartService extends Activity implements OnClickListener {
 
-	private Button button;
+//	private Button button;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +18,7 @@ public class StartService extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 //		setContentView(R.layout.start_service);
 //		button = (Button) findViewById(R.id.button1);
-		button.setOnClickListener(this);
+//		button.setOnClickListener(this);
 	}
 
 	public void onClick(View v) {

@@ -4,18 +4,17 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/mapview"
+    <!-- <com.google.android.gms.maps.MapView
+        android:id="@+id/mapView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:apiKey="AIzaSyBwwSr2U_1H_Ko9bpTHkTmKQtE3fmVeocw"
         android:clickable="true"
-        android:enabled="true" />
-	<!-- <fragment
+        android:enabled="true" /> -->
+	<fragment
 	  android:id="@+id/mapview"
 	  android:layout_width="match_parent"
 	  android:layout_height="match_parent"
-	  class="com.google.android.gms.maps.MapFragment"/> -->
+	  class="com.google.android.gms.maps.SupportMapFragment"/>
 
     <LinearLayout
         android:id="@+id/DistanceTextLayout"
@@ -25,7 +24,7 @@
         android:layout_x="142dp"
         android:layout_y="2dp"
         android:background="@drawable/buttons_background"
-        android:gravity="right"
+        android:gravity="left|top"
         android:orientation="horizontal"
         android:padding="3.0px"
         android:weightSum="1.0" >
@@ -53,7 +52,7 @@
         android:layout_x="142dp"
         android:layout_y="38dp"
         android:background="@drawable/buttons_background"
-        android:gravity="right"
+        android:gravity="left|top"
         android:orientation="horizontal"
         android:padding="3.0px"
         android:weightSum="1.0" >
@@ -103,7 +102,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/ButtonLayout"
+        android:id="@+id/ButtonLayout1"
         android:layout_width="wrap_content"
         android:layout_height="120dp"
         android:layout_marginTop="5.0px"
