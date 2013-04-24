@@ -104,7 +104,9 @@ public class Main extends FragmentActivity implements LocationCallBack,
 		delete = (ImageButton) findViewById(R.id.delete);
 		clear = (ImageButton) findViewById(R.id.clear);
 		toggleButton0 = (ToggleButton) findViewById(R.id.toggleButton0);
+		toggleButton0.setChecked(false);
 		toggleButton1 = (ToggleButton) findViewById(R.id.toggleButton1);
+		toggleButton1.setChecked(false);
 		toggleButton2 = (ToggleButton) findViewById(R.id.toggleButton2);
 		
 		delete.setOnClickListener(this);
@@ -127,7 +129,7 @@ public class Main extends FragmentActivity implements LocationCallBack,
 		map.getUiSettings().setZoomControlsEnabled(true);
 		polyline = map.addPolyline(new PolylineOptions().width(5));
 //		polygon = map.addPolygon(new PolygonOptions());
-		map.moveCamera(CameraUpdateFactory.zoomTo(3));
+		map.moveCamera(CameraUpdateFactory.zoomTo(15));
 		/*mapController = mapView.getController();
 		mapController.setZoom(3);*/
 //		mapOverlay = new MapOverlay();
@@ -237,11 +239,8 @@ public class Main extends FragmentActivity implements LocationCallBack,
 			if (!geopoints.isEmpty()) {
 				listpoint.remove(listpoint.size() - 1);
 				geopoints.remove(geopoints.size() - 1);
-				polyline.setPoints(geopoints);
-//				polygon.setPoints(geopoints);
 				markers.get(markers.size()-1).remove();
 				markers.remove(markers.size()-1);
-//				removeOverlay();
 				overlayAndtextShow();
 			} else {
 				Toast.makeText(MyApplication.getInstance(), "no point",
@@ -252,19 +251,19 @@ public class Main extends FragmentActivity implements LocationCallBack,
 			if (!geopoints.isEmpty()) {
 				listpoint.removeAll(listpoint);
 				geopoints.removeAll(geopoints);
-				polyline.remove();
-				if (polygon != null) {
-					polygon.remove();
-				}
+//				polyline.setPoints(geopoints);
+//				if (polygon != null) {
+//					polygon.remove();
+//				}
 				for (int i = 0; i < markers.size(); i++) {
 					markers.get(i).remove();
 				}
 				markers.removeAll(markers);
 //				removeOverlay();
 //				map.clear();
-				polyline = map.addPolyline(new PolylineOptions().width(5));
+//				polyline = map.addPolyline(new PolylineOptions().width(5));
 //				polygon = map.addPolygon(new PolygonOptions().strokeWidth(5));
-//				overlayAndtextShow();
+				overlayAndtextShow();
 			} else {
 				Toast.makeText(MyApplication.getInstance(), "no point",
 						Toast.LENGTH_SHORT).show();
@@ -293,17 +292,36 @@ public class Main extends FragmentActivity implements LocationCallBack,
 //		mapView.getOverlays().add(new LineOverlay(geopoints));
 //		mapView.getOverlays().add(new MarkerOverlay(geopoints));
 //		System.out.println(geopoints);
+		if (geopoints.isEmpty()) {
+//			polyline.remove();
+			polyline.setPoints(geopoints);
+			if (Polygon && polygon != null) {
+				polygon.remove();
+				polygon = null;
+//				System.out.println(polygon);
+			}
+		}
 		polyline.setPoints(geopoints);
 		polyline.setVisible(true);
 //		System.out.println(polyline.getPoints());
 		if (Polygon) {
 //			mapView.getOverlays().add(new PolygonOverlay(geopoints));
-			if (!geopoints.isEmpty()) {
-				polygon.setPoints(geopoints);
-				polygon.setVisible(true);
+			if (geopoints.size() > 2) {
+				if (polygon != null) {
+					polygon.setPoints(geopoints);
+				}else {
+					polygon = map.addPolygon(new PolygonOptions().addAll(geopoints).strokeWidth(5));
+				}
+			}else {
+				if (polygon != null) {
+					polygon.remove();
+					polygon = null;
+				}
 			}
 			dStr = Conversion.ConversionA(CaculationArea.calculateArea(listpoint));
 			TextArea.setText("A:" + dStr);
+		}else {
+			TextArea.setText("A:0㎡");
 		}	
 		dStr = Conversion
 				.ConversionD(CaculationDistance.getDistance(listpoint));
@@ -322,14 +340,27 @@ public class Main extends FragmentActivity implements LocationCallBack,
 			if (isChecked) {
 //				mapView.setSatellite(false);
 				map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-//				mapView.setTraffic(true);
+				if (!geopoints.isEmpty()) {
+					listpoint.removeAll(listpoint);
+					geopoints.removeAll(geopoints);
+					for (int i = 0; i < markers.size(); i++) {
+						markers.get(i).remove();
+					}
+					markers.removeAll(markers);
+					overlayAndtextShow();
+				}
 			} else {
-//				mapView.setSatellite(true);
-//				mapView.setTraffic(false);
 				map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-
+				if (!geopoints.isEmpty()) {
+					listpoint.removeAll(listpoint);
+					geopoints.removeAll(geopoints);
+					for (int i = 0; i < markers.size(); i++) {
+						markers.get(i).remove();
+					}
+					markers.removeAll(markers);
+					overlayAndtextShow();
+				}
 			}
-
 		}
 	}
 
@@ -350,25 +381,16 @@ public class Main extends FragmentActivity implements LocationCallBack,
 		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 			if (isChecked) {
 				Polygon = false;
-//				removeOverlay();
-//				map.clear();
-				geopoints.removeAll(geopoints);
-				listpoint.removeAll(listpoint);
-				polyline.remove();
-				polygon.remove();
-				for (int i = 0; i < markers.size(); i++) {
-					markers.get(i).remove();
+				if (polygon != null) {
+					polygon.remove();
+					polygon = null;
 				}
-				markers.removeAll(markers);
-//				overlayAndtextShow();
-				polyline = map.addPolyline(new PolylineOptions().width(5));
-//				polygon = map.addPolygon(new PolygonOptions().strokeWidth(5));
-				TextArea.setText("A:0sq.m");
-				TextDistance.setText("D:0m");
+				TextArea.setText("A:0㎡");
 			} else {
 				Polygon = true;
-//				mapView.getOverlays().add(new PolygonOverlay(geopoints));
-				polygon = map.addPolygon(new PolygonOptions().addAll(geopoints).strokeWidth(5));
+				if (geopoints.size() > 2) {
+					polygon = map.addPolygon(new PolygonOptions().addAll(geopoints).strokeWidth(5));
+				}
 				dStr = Conversion.ConversionA(CaculationArea.calculateArea(listpoint));
 //				dStr = Conversion.ConversionA(CaculationArea.calculateArea(geopoints));
 				TextArea.setText("A:" + dStr);

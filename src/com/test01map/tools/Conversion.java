@@ -6,7 +6,7 @@ import java.text.DecimalFormat;
 public class Conversion {
 
 	public static String ConversionD(int nub){
-		DecimalFormat dt=(DecimalFormat) DecimalFormat.getInstance(); //ªÒµ√∏Ò ΩªØ¿‡∂‘œÛ
+		DecimalFormat dt=(DecimalFormat) DecimalFormat.getInstance(); //ÔøΩÔøΩ√∏ÔøΩ ΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ
 		dt.applyPattern("0");
 		double i = nub;
 		String mOrkm = dt.format(i) + "m";
@@ -19,14 +19,15 @@ public class Conversion {
 	}
 	
 	public static String ConversionA(double nub){
-		DecimalFormat dt=(DecimalFormat) DecimalFormat.getInstance(); //ªÒµ√∏Ò ΩªØ¿‡∂‘œÛ
+		DecimalFormat dt=(DecimalFormat) DecimalFormat.getInstance(); //ÔøΩÔøΩ√∏ÔøΩ ΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ
 		dt.applyPattern("0");
 		double i = nub;
-		String mOrkm =dt.format(i) + "sq.m";
+		String mOrkm =dt.format(i) + "„é°";
 		if (nub > 1000000) {
 			dt.applyPattern("0.00");
 			i = i/1000000;
-			mOrkm = dt.format(i) + "sq.km";
+//			mOrkm = dt.format(i) + "sq.km";
+			mOrkm = dt.format(i) + "k„é°";
 		}
 		return mOrkm;
 	}
