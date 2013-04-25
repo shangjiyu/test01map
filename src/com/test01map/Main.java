@@ -1,13 +1,14 @@
 package com.test01map;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+//import java.util.Iterator;
 import java.util.List;
 
-import android.app.Activity;
+import android.app.ActionBar;
+//import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
+//import android.content.Intent;
 import android.graphics.PointF;
 import android.location.Location;
 import android.os.Bundle;
@@ -26,19 +27,20 @@ import android.widget.ToggleButton;
 
 //import com.google.android.maps.GeoPoint;
 //import com.google.android.maps.MapController;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+//import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.internal.af.c;
-import com.google.android.gms.internal.co;
-import com.google.android.gms.internal.l;
+//import com.google.android.gms.internal.af.c;
+//import com.google.android.gms.internal.co;
+//import com.google.android.gms.internal.l;
 //import com.google.android.maps.MapView;
-import com.google.android.gms.maps.MapView;
+//import com.google.android.gms.maps.MapView;
 import com.google.android.maps.Overlay;
-import com.google.android.gms.maps.CameraUpdate;
+//import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -46,12 +48,13 @@ import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.plus.GooglePlusUtil;
+//import com.google.android.gms.plus.GooglePlusUtil;
 //import com.google.android.gms.maps.SupportMapFragment;
 //import com.google.android.gms.maps.model.LatLng;
 //import com.google.android.gms.maps.model.MarkerOptions;
 
 import com.test01map.MyLocationManager.LocationCallBack;
+import com.test01map.actionbar.ActionBarActivity;
 import com.test01map.caculation.CaculationArea;
 import com.test01map.caculation.CaculationDistance;
 //import com.test01map.overlay.LineOverlay;
@@ -59,7 +62,7 @@ import com.test01map.caculation.CaculationDistance;
 //import com.test01map.overlay.PolygonOverlay;
 import com.test01map.tools.Conversion;
 
-public class Main extends FragmentActivity implements LocationCallBack,
+public class Main extends ActionBarActivity implements LocationCallBack,
 		OnClickListener, OnMapClickListener {
 
 	private MyLocationManager mylocation;
@@ -100,6 +103,8 @@ public class Main extends FragmentActivity implements LocationCallBack,
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.main);
+//		ActionBar actionBar = getActionBar();
+//		actionBar.show();
 
 		delete = (ImageButton) findViewById(R.id.delete);
 		clear = (ImageButton) findViewById(R.id.clear);
@@ -124,18 +129,14 @@ public class Main extends FragmentActivity implements LocationCallBack,
 	            .getMap();
 //		GoogleMap map = (GoogleMap) mapView.getMap();
 //		System.out.println(map);
-		map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+//		map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
 		map.setMyLocationEnabled(true);
 		map.getUiSettings().setZoomControlsEnabled(true);
 		polyline = map.addPolyline(new PolylineOptions().width(5));
 //		polygon = map.addPolygon(new PolygonOptions());
 		map.moveCamera(CameraUpdateFactory.zoomTo(15));
-		/*mapController = mapView.getController();
-		mapController.setZoom(3);*/
-//		mapOverlay = new MapOverlay();
-//		listOfOverlays = mapView.getOverlays();
-//		listOfOverlays.clear();
-//		listOfOverlays.add(mapOverlay);
+//----------------------animateTheCamera2TheDestination------------------------------------
+		
 
 		MyLocationManager.init(Main.this.getApplicationContext(), Main.this);
 		mylocation = MyLocationManager.getInstance();
@@ -185,10 +186,18 @@ public class Main extends FragmentActivity implements LocationCallBack,
 			break;
 			
 		case 2:
-			
-			Intent intent = new Intent(this, StartService.class);
-			startActivity(intent);
-
+//			Intent intent = new Intent(this, StartService.class);
+//			startActivity(intent);
+			new AlertDialog.Builder(getApplicationContext())
+				.setTitle("service alert")
+				.setMessage("无服务可用")
+				.setPositiveButton("退出", new DialogInterface.OnClickListener() {
+					
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						dialog.cancel();
+					}
+				}).create().show();
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -202,20 +211,6 @@ public class Main extends FragmentActivity implements LocationCallBack,
 		return false;
 	}
 
-/*	class MapOverlay extends Overlay {
-		public boolean onTap(GeoPoint p, MapView mapView) {
-
-			pointF = new PointF(p.getLatitudeE6(), p.getLongitudeE6());
-			listpoint.add(pointF);
-			geopoints.add(p);
-//			removeOverlay();
-			overlayAndtextShow();
-			addpoint = false;
-//			mapController.animateTo(p);
-			return false;
-
-		}
-	}*/
 	public void setOnMapClickListener(boolean flag) {
 		if (flag) {
 			map.setOnMapClickListener(this);
@@ -284,7 +279,16 @@ public class Main extends FragmentActivity implements LocationCallBack,
 		listpoint.add(pointFGps);
 		geopoints.add(pGps);
 		markers.add(map.addMarker(new MarkerOptions().position(pGps).title("marker")));
-		map.moveCamera(CameraUpdateFactory.newLatLng(pGps));
+//		map.moveCamera(CameraUpdateFactory.newLatLng(pGps));
+//		-------------------------------------------------------------
+		CameraPosition destPosition =
+	            new CameraPosition.Builder().target(pGps)
+	                    .zoom(17.5f)
+//	                    .bearing(300)
+//	                    .tilt(50)
+	                    .build();
+		map.animateCamera(CameraUpdateFactory.newCameraPosition(destPosition));
+//		----------------------------------------------------------------------------------
 		overlayAndtextShow();
 	}
 
