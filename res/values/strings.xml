@@ -8,5 +8,11 @@
     <string name="area">A:0sq.m</string>
     <string name="start">启动服务</string>
     <string name="stop">停止服务</string>
+    <string name="exit">exit</string>
+    <string name="clearButton">清除</string>
+    <string name="redoButton">重画</string>
+    <string name="areaToggleButton">areaToggleButton</string>
+    <string name="mapTypeToggleButton">MTT</string>
+    <string name="manulyToggleButton">manulyToggleButton</string>
 
 </resources>

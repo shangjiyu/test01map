@@ -71,7 +71,7 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <LinearLayout
+    <!-- <LinearLayout
         android:id="@+id/ButtonLayout"
         android:layout_width="wrap_content"
         android:layout_height="108dp"
@@ -103,7 +103,7 @@
 
     <LinearLayout
         android:id="@+id/ButtonLayout1"
-        android:layout_width="wrap_content"
+        android:layout_width="40dp"
         android:layout_height="120dp"
         android:layout_marginTop="5.0px"
         android:layout_x="281dp"
@@ -143,6 +143,6 @@
             android:checked="true"
             android:textOff=""
             android:textOn="" />
-    </LinearLayout>
+    </LinearLayout> -->
 
 </AbsoluteLayout>
