@@ -2,29 +2,64 @@ package com.test01map.overlay;
 
 import java.util.List;
 
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Paint.Style;
-import android.graphics.Path;
-import android.graphics.Point;
+//import android.graphics.Canvas;
+//import android.graphics.Color;
+//import android.graphics.Paint;
+//import android.graphics.Paint.Style;
+//import android.graphics.Path;
+//import android.graphics.Point;
 
-import com.google.android.maps.GeoPoint;
-import com.google.android.maps.MapView;
-import com.google.android.maps.Overlay;
-import com.google.android.maps.Projection;
+import com.baidu.mapapi.map.Geometry;
+import com.baidu.mapapi.map.Graphic;
+import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.GraphicsOverlay;
+import com.baidu.mapapi.map.Symbol;
+import com.baidu.platform.comapi.basestruct.GeoPoint;
 
-public class PolygonOverlay extends Overlay {
+public class PolygonOverlay extends GraphicsOverlay {
 
-	List<GeoPoint> geopoints;
+//	List<GeoPoint> geopoints;
+	GeoPoint[] geoPoints;
 	int size;
-
-	public PolygonOverlay(List<GeoPoint> geopoints) {
-
-		this.geopoints = geopoints;
+	Geometry polygonGeometry;
+	Symbol polygonSymbol;
+	Graphic polygonGraphic;
+	MapView bMapView;
+	long longPolygonId;
+	
+	public PolygonOverlay(List<GeoPoint> geopoints, MapView bMapView) {
+		super(bMapView);
+		this.geoPoints = new GeoPoint[geopoints.size()+1];
+		for (int i = 0; i < geopoints.size(); i++) {
+			geoPoints[i] = geopoints.get(i);
+		}
+		geoPoints[geopoints.size()+1] = geopoints.get(0);
+		this.polygonGeometry = new Geometry();
+		polygonGeometry.setPolyLine(geoPoints);
+		this.polygonSymbol = new Symbol();
+		Symbol.Color polygonColor = polygonSymbol.new Color();
+		polygonColor.red = 255;
+		polygonColor.green = 255;
+		polygonColor.blue = 255;
+		polygonColor.alpha = 255;
+		polygonSymbol.setSurface(polygonColor, 1, 4);
+		this.polygonGraphic = new Graphic(polygonGeometry, polygonSymbol);
+		this.bMapView = bMapView;
+		
 	}
-
-	@Override
+	
+	public long draw () {
+		this.longPolygonId = this.setData(polygonGraphic);
+		bMapView.getOverlays().add(this);
+		bMapView.refresh();
+		return this.longPolygonId;
+	}
+	
+	public void delete () {
+		this.removeGraphic(this.longPolygonId);
+	}
+	
+	/*@Override
 	public boolean draw(Canvas canvas, MapView mapView, boolean shadow,
 			long when) {
 		super.draw(canvas, mapView, shadow, when);
@@ -59,6 +94,6 @@ public class PolygonOverlay extends Overlay {
 		}
 		canvas.drawPath(wallpath, wallpaint);
 	   return super.draw(canvas, mapView, shadow, when);
-	}
+	}*/
 
 }

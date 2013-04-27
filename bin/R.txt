@@ -60,6 +60,7 @@ int id actionbar_compat_item_refresh 0x7f040008
 int id actionbar_compat_item_refresh_progress 0x7f040007
 int id actionbar_compat_title 0x7f040006
 int id areaToggleButton 0x7f040012
+int id bmapsView 0x7f04000b
 int id clearButton 0x7f040015
 int id exit 0x7f040016
 int id hybrid 0x7f040004
@@ -67,7 +68,6 @@ int id main 0x7f04000a
 int id manulyToggleButton 0x7f040013
 int id mapFragment 0x7f040010
 int id mapTypeToggleButton 0x7f040011
-int id mapview 0x7f04000b
 int id menu_refresh 0x7f040009
 int id none 0x7f040000
 int id normal 0x7f040001

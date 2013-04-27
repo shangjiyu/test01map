@@ -4,17 +4,10 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
-    <!-- <com.google.android.gms.maps.MapView
-        android:id="@+id/mapView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:enabled="true" /> -->
-	<fragment
-	  android:id="@+id/mapview"
-	  android:layout_width="match_parent"
-	  android:layout_height="match_parent"
-	  class="com.google.android.gms.maps.SupportMapFragment"/>
+	<com.baidu.mapapi.map.MapView android:id="@+id/bmapsView"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:clickable="true" />
 
     <LinearLayout
         android:id="@+id/DistanceTextLayout"
@@ -70,79 +63,5 @@
             android:textColor="#ffffffff"
             android:textStyle="bold" />
     </LinearLayout>
-
-    <!-- <LinearLayout
-        android:id="@+id/ButtonLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="108dp"
-        android:layout_marginTop="5.0px"
-        android:layout_x="281dp"
-        android:layout_y="280dp"
-        android:background="@drawable/buttons_background"
-        android:gravity="right"
-        android:orientation="vertical"
-        android:padding="3.0px" >
-
-        <ImageButton
-            android:id="@+id/delete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:src="@drawable/deletexml" />
-
-        <ImageButton
-            android:id="@+id/clear"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:src="@drawable/clearpress"
-             />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ButtonLayout1"
-        android:layout_width="40dp"
-        android:layout_height="120dp"
-        android:layout_marginTop="5.0px"
-        android:layout_x="281dp"
-        android:layout_y="146dp"
-        android:background="@drawable/buttons_background"
-        android:gravity="right"
-        android:orientation="vertical"
-        android:padding="3.0px"
-        android:weightSum="2.0" >
-
-        <ToggleButton
-            android:id="@+id/toggleButton0"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/toggleselector0"
-            android:checked="true"
-            android:textOff=""
-            android:textOn="" />
-
-        <ToggleButton
-            android:id="@+id/toggleButton1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/toggleselector1"
-            android:checked="true"
-            android:textOff=""
-            android:textOn="" />
-
-        <ToggleButton
-            android:id="@+id/toggleButton2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/toggleselector2"
-            android:checked="true"
-            android:textOff=""
-            android:textOn="" />
-    </LinearLayout> -->
 
 </AbsoluteLayout>
