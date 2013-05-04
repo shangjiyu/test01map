@@ -35,20 +35,19 @@ public class LineOverlay extends GraphicsOverlay {
 		lineGeometry.setPolyLine(geoPoints);
 		this.lineSymbol = new Symbol();
 		Symbol.Color lineColor = lineSymbol.new Color();
-		lineColor.red =255;
-		lineColor.green = 255;
-		lineColor.blue = 255;
+		lineColor.red =0;
+		lineColor.green = 0;
+		lineColor.blue = 0;
 		lineColor.alpha = 255;
 		lineSymbol.setLineSymbol(lineColor, 4);
 		this.lineGraphic = new Graphic(lineGeometry, lineSymbol);
 		this.bMapView = bMapView;
-		
+		this.longPolylineId = this.setData(lineGraphic);
 	}
 	
 	public long draw () {
-		this.longPolylineId = this.setData(lineGraphic);
-		bMapView.getOverlays().add(this);
-		bMapView.refresh();
+		this.bMapView.getOverlays().add(this);
+		this.bMapView.refresh();
 		return this.longPolylineId;
 	}
 	

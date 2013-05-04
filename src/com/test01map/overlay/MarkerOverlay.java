@@ -32,46 +32,22 @@ public class MarkerOverlay extends GraphicsOverlay {
 		this.markerSymbol = new Symbol();
 		Symbol.Color markerColor = markerSymbol.new Color();
 		markerColor.red = 0;
-		markerColor.green = 255;
+		markerColor.green = 0;
 		markerColor.blue = 0;
-		markerColor.alpha =126;
+		markerColor.alpha =255;
 		markerSymbol.setPointSymbol(markerColor);
 		this.markerGraphic = new Graphic(markerGeometry, markerSymbol);
-		
+		this.bMapView = bMapView;
+		this.longMarkerId = this.setData(markerGraphic);
 	}
 	
 	public long draw () {
-		this.longMarkerId = this.setData(markerGraphic);
-		bMapView.getOverlays().add(this);
-		bMapView.refresh();
+		this.bMapView.getOverlays().add(this);
+		this.bMapView.refresh();
 		return this.longMarkerId;
 	}
 	
 	public void delete () {
 		this.removeGraphic(this.longMarkerId);
 	}
-	
-	/*public boolean draw(Canvas canvas, MapView mapView, boolean shadow,
-			long when) {
-//		super.draw(canvas, mapView, shadow);
-		
-		Paint paint = new Paint();
-		paint.setARGB(100, 0, 0, 255);
-		paint.setStyle(Paint.Style.STROKE);
-		paint.setStrokeWidth(4);
-
-		Paint paintText = new Paint();
-		paintText.setTextSize(18);
-		paintText.setColor(Color.RED);
-		
-		size = geopoints.size();
-		// ---translate the GeoPoint to screen pixels---
-		for (int i = 0; i < size; i++) {
-			Point screenPts = new Point();
-			mapView.getProjection().toPixels(geopoints.get(i), screenPts);
-			canvas.drawCircle(screenPts.x, screenPts.y, 3, paint);
-		}
-		
-		return true;
-	}*/
 }

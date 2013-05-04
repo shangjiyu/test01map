@@ -29,29 +29,28 @@ public class PolygonOverlay extends GraphicsOverlay {
 	
 	public PolygonOverlay(List<GeoPoint> geopoints, MapView bMapView) {
 		super(bMapView);
-		this.geoPoints = new GeoPoint[geopoints.size()+1];
+		this.geoPoints = new GeoPoint[(geopoints.size()+1)];
 		for (int i = 0; i < geopoints.size(); i++) {
 			geoPoints[i] = geopoints.get(i);
 		}
-		geoPoints[geopoints.size()+1] = geopoints.get(0);
+		this.geoPoints[geopoints.size()] = geopoints.get(0);
 		this.polygonGeometry = new Geometry();
-		polygonGeometry.setPolyLine(geoPoints);
+		this.polygonGeometry.setPolyLine(geoPoints);
 		this.polygonSymbol = new Symbol();
 		Symbol.Color polygonColor = polygonSymbol.new Color();
-		polygonColor.red = 255;
-		polygonColor.green = 255;
-		polygonColor.blue = 255;
+		polygonColor.red = 0;
+		polygonColor.green = 0;
+		polygonColor.blue = 0;
 		polygonColor.alpha = 255;
 		polygonSymbol.setSurface(polygonColor, 1, 4);
 		this.polygonGraphic = new Graphic(polygonGeometry, polygonSymbol);
 		this.bMapView = bMapView;
-		
+		this.longPolygonId = this.setData(polygonGraphic);
 	}
 	
 	public long draw () {
-		this.longPolygonId = this.setData(polygonGraphic);
-		bMapView.getOverlays().add(this);
-		bMapView.refresh();
+		this.bMapView.getOverlays().add(this);
+		this.bMapView.refresh();
 		return this.longPolygonId;
 	}
 	

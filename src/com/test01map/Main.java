@@ -4,13 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.PointF;
 import android.location.Location;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,13 +20,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.baidu.mapapi.BMapManager;
 import com.baidu.mapapi.map.MapController;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.platform.comapi.basestruct.GeoPoint;
 
 import com.test01map.MyLocationManager.LocationCallBack;
-import com.test01map.actionbar.ActionBarActivity;
 import com.test01map.caculation.CaculationArea;
 import com.test01map.caculation.CaculationDistance;
 import com.test01map.overlay.LineOverlay;
@@ -36,14 +38,14 @@ import com.test01map.overlay.MarkerOverlay;
 import com.test01map.overlay.PolygonOverlay;
 import com.test01map.tools.Conversion;
 
-public class Main extends ActionBarActivity implements LocationCallBack,
+public class Main extends SherlockActivity implements LocationCallBack,
 		OnClickListener {
 
 	private MyLocationManager mylocation;
 	GeoPoint p, pGps;
 //	LatLng p,pGps;
-	LineOverlay polyline;
-	PolygonOverlay polygon;
+	LineOverlay polyline = null;
+	PolygonOverlay polygon = null;
 //	List<Overlay> listOfOverlays = new ArrayList<Overlay>();
 	List<PointF> listpoint = new ArrayList<PointF>();
 	List<GeoPoint> geopoints = new ArrayList<GeoPoint>();
@@ -80,14 +82,14 @@ public class Main extends ActionBarActivity implements LocationCallBack,
 		super.onCreate(savedInstanceState);
 //		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		
-		TextDistance = (TextView) findViewById(R.id.Distance);
-		TextArea = (TextView) findViewById(R.id.Area);
-		
 		bMapManager = new BMapManager(getApplication());
 		bMapManager.init("31EB3BBC63C599FB0D5C6F9E2E2BE3FFE4E726FB", null);
 		setContentView(R.layout.main);
 		
-		ActionBar actionBar = getActionBar();
+		TextDistance = (TextView) findViewById(R.id.Distance);
+		TextArea = (TextView) findViewById(R.id.Area);
+		
+		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(false);
 //		actionBar.setHomeButtonEnabled(false);
 		actionBar.setDisplayShowHomeEnabled(false);
@@ -100,15 +102,17 @@ public class Main extends ActionBarActivity implements LocationCallBack,
 		bMapController = bMapView.getController();
 //		取得地图控制权
 		bMapController.setZoom(15);
+		
+		MyLocationManager.init(Main.this.getApplicationContext(), Main.this);
+		mylocation = MyLocationManager.getInstance();
+		
 	}
 
-	@SuppressLint("NewApi")
-	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
-		super.onCreateOptionsMenu(menu);
-		MenuInflater inflater = getMenuInflater();
+		MenuInflater inflater = getSupportMenuInflater();
 		inflater.inflate(R.menu.main, menu);
+//		MenuCompat.setShowAsAction(menu.findItem(R.id.mapTypeToggleButton), 1);
 		mapTypeToggleButton = (ToggleButton) menu.findItem(R.id.mapTypeToggleButton).getActionView();
 		mapTypeToggleButton.setTextOn("卫星");
 		mapTypeToggleButton.setTextOff("普通");
@@ -177,7 +181,7 @@ public class Main extends ActionBarActivity implements LocationCallBack,
 //				bMapView.refresh();
 			}
 		});
-//		areaToggleButton.setChecked(true);
+		areaToggleButton.setChecked(true);
 		manulyToggleButton = (ToggleButton) menu.findItem(R.id.manulyToggleButton).getActionView();
 		manulyToggleButton.setTextOff("手动");
 		manulyToggleButton.setTextOn("定位");
@@ -197,7 +201,7 @@ public class Main extends ActionBarActivity implements LocationCallBack,
 				}
 			}
 		});
-//		manulyToggleButton.setChecked(true);
+		manulyToggleButton.setChecked(false);
 		redoButton = (Button) menu.findItem(R.id.redoButton).getActionView();
 		redoButton.setText(R.string.redoButton);
 		redoButton.setOnClickListener(new OnClickListener() {
@@ -240,7 +244,31 @@ public class Main extends ActionBarActivity implements LocationCallBack,
 	}
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		super.onMenuItemSelected(featureId, item);
-//		AlertDialog.Builder alertbBuilder = new AlertDialog.Builder(this);
+		AlertDialog.Builder alertbBuilder = new AlertDialog.Builder(this);
+		switch (item.getItemId()) {
+		case R.id.exit:
+			alertbBuilder.setTitle("退出程序")
+				.setMessage("确定退出？")
+				.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+					
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						android.os.Process.killProcess(android.os.Process.myPid());
+					}
+				})
+				.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+					
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						dialog.cancel();
+					}
+				}).create();
+			alertbBuilder.show();
+			break;
+
+		default:
+			break;
+		}
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -282,15 +310,6 @@ public class Main extends ActionBarActivity implements LocationCallBack,
 		}
 		
 	}
-//	public void onMapClick (LatLng latLng) {
-////		geopoints.add(latLng);
-//		pointFGps = new PointF((float)(latLng.latitude*1E6),(float)(latLng.longitude*1E6));
-//		listpoint.add(pointFGps);
-////		markers.add(map.addMarker(new MarkerOptions().position(latLng)));
-////		map.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-////		map.animateCamera(CameraUpdateFactory.zoomTo(17));
-//		overlayAndtextShow();
-//	}
 	public void onClick(View v) {
 	}
 
@@ -306,17 +325,6 @@ public class Main extends ActionBarActivity implements LocationCallBack,
 		geopoints.add(pGps);
 		markers.add(new MarkerOverlay(bMapView, pGps));
 		bMapView.getController().animateTo(pGps);
-//		map.moveCamera(CameraUpdateFactory.newLatLng(pGps));
-//		-------------------------------------------------------------
-//		bMapView.getController().animateTo(pGps);
-//		CameraPosition destPosition =
-//	            new CameraPosition.Builder().target(pGps)
-//	                    .zoom(17.5f)
-////	                    .bearing(300)
-////	                    .tilt(50)
-//	                    .build();
-//		map.animateCamera(CameraUpdateFactory.newCameraPosition(destPosition));
-//		----------------------------------------------------------------------------------
 		overlayAndtextShow();
 	}
 
@@ -342,11 +350,18 @@ public class Main extends ActionBarActivity implements LocationCallBack,
 				polygon = null;
 //				System.out.println(polygon);
 			}
+			TextDistance.setText("D:0m");
+			TextArea.setText("A:0㎡");
 		}else {
 			markers.get(markers.size()-1).draw();
-			polyline.delete();
-			polyline = new LineOverlay(geopoints, bMapView);
-			polyline.draw();
+			if (polyline != null) {
+				polyline.delete();
+				polyline = new LineOverlay(geopoints, bMapView);
+				polyline.draw();
+			}else {
+				polyline = new LineOverlay(geopoints, bMapView);
+				polyline.draw();
+			}
 			if (Polygon) {
 //				mapView.getOverlays().add(new PolygonOverlay(geopoints));
 				if (geopoints.size() > 2) {
@@ -382,100 +397,4 @@ public class Main extends ActionBarActivity implements LocationCallBack,
 		super.onDestroy();
 		android.os.Process.killProcess(android.os.Process.myPid());
 	}
-	
-	/*class toggleButton0Listener implements OnCheckedChangeListener {
-		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//			GoogleMap map = (GoogleMap)mapView.getMap();
-			if (isChecked) {
-//				mapView.setSatellite(false);
-				map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-				if (!geopoints.isEmpty()) {
-					listpoint.removeAll(listpoint);
-					geopoints.removeAll(geopoints);
-					for (int i = 0; i < markers.size(); i++) {
-						markers.get(i).remove();
-					}
-					markers.removeAll(markers);
-					overlayAndtextShow();
-				}
-			} else {
-				map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-				if (!geopoints.isEmpty()) {
-					listpoint.removeAll(listpoint);
-					geopoints.removeAll(geopoints);
-					for (int i = 0; i < markers.size(); i++) {
-						markers.get(i).remove();
-					}
-					markers.removeAll(markers);
-					overlayAndtextShow();
-				}
-			}
-		}
-	}
-
-	class toggleButton1Listener implements OnCheckedChangeListener {
-		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-			if (isChecked) {
-				mylocation.destoryLocationManager();
-				setOnMapClickListener(true);
-			} else {
-				mylocation.addLocationManager();
-				setOnMapClickListener(false);
-			}
-
-		}
-	}
-	
-	class toggleButton2Listener implements OnCheckedChangeListener {
-		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-			if (isChecked) {
-				Polygon = false;
-				if (polygon != null) {
-					polygon.remove();
-					polygon = null;
-				}
-				TextArea.setText("A:0㎡");
-			} else {
-				Polygon = true;
-				if (geopoints.size() > 2) {
-					polygon = map.addPolygon(new PolygonOptions().addAll(geopoints).strokeWidth(5));
-				}
-				dStr = Conversion.ConversionA(CaculationArea.calculateArea(listpoint));
-//				dStr = Conversion.ConversionA(CaculationArea.calculateArea(geopoints));
-				TextArea.setText("A:" + dStr);
-			}
-
-		}
-	}*/
-	/*class areaToggleButtonListener implements OnCheckedChangeListener{
-		public void onCheckedChanged(CompoundButton button, boolean isChecked) {
-			if (isChecked) {
-				Polygon = false;
-				if (polygon != null) {
-					polygon.remove();
-					polygon = null;
-				}
-				TextArea.setText("A:0㎡");
-			} else {
-				Polygon = true;
-				if (geopoints.size() > 2) {
-					polygon = map.addPolygon(new PolygonOptions().addAll(geopoints).strokeWidth(5));
-				}
-				dStr = Conversion.ConversionA(CaculationArea.calculateArea(listpoint));
-//				dStr = Conversion.ConversionA(CaculationArea.calculateArea(geopoints));
-				TextArea.setText("A:" + dStr);
-			}
-		}
-	}*/
-	/*class manulyToggleButtonListener implements OnCheckedChangeListener {
-		public void onCheckedChanged(CompoundButton button,boolean isChecked) {
-			if (isChecked) {
-				mylocation.destoryLocationManager();
-				setOnMapClickListener(true);
-			} else {
-				mylocation.addLocationManager();
-				setOnMapClickListener(false);
-			}
-		}
-	}*/
 }
