@@ -1109,7 +1109,7 @@ containing a value of this type.
         public static final int hello_world=0x7f09000e;
         public static final int manulyToggleButton=0x7f09001a;
         public static final int mapTypeToggleButton=0x7f090019;
-        public static final int menu_settings=0x7f09000f;
+        public static final int menu_share=0x7f09000f;
         public static final int redoButton=0x7f090017;
         public static final int start=0x7f090013;
         public static final int stop=0x7f090014;

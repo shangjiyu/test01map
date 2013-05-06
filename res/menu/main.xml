@@ -1,7 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- <item android:id="@+id/menu_settings"
-        android:title="@string/menu_settings"
-        android:orderInCategory="100" /> -->
+    <!-- <item android:id="@+id/menu_share"
+        android:title="@string/menu_share"
+        android:showAsAction="always|collapseActionView"
+        android:actionProviderClass="com.actionbarsherlock.widget.ShareActionProvider" /> -->
     <item android:id="@+id/mapTypeToggleButton"
         android:title="@string/mapTypeToggleButton"
         android:showAsAction="always|withText"

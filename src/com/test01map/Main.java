@@ -6,9 +6,12 @@ import java.util.List;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.PointF;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,7 +28,13 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.widget.ShareActionProvider;
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.BMapManager;
+import com.baidu.mapapi.map.GraphicsOverlay;
 import com.baidu.mapapi.map.MapController;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.platform.comapi.basestruct.GeoPoint;
@@ -41,7 +50,6 @@ import com.test01map.tools.Conversion;
 public class Main extends SherlockActivity implements LocationCallBack,
 		OnClickListener {
 
-	private MyLocationManager mylocation;
 	GeoPoint p, pGps;
 //	LatLng p,pGps;
 	LineOverlay polyline = null;
@@ -57,6 +65,10 @@ public class Main extends SherlockActivity implements LocationCallBack,
 	BMapManager bMapManager;
 	MapView bMapView;
 	MapController bMapController;
+	GraphicsOverlay bGraphicsOverlay;
+	LocationClient bLocationClient;
+	LocationClientOption bLocationClientOption = new LocationClientOption();
+	TestLocationListener testLocationListener = new TestLocationListener();
 //	MapView mapView;
 //	GoogleMap mapView
 //	MapOverlay mapOverlay;
@@ -90,10 +102,10 @@ public class Main extends SherlockActivity implements LocationCallBack,
 		TextArea = (TextView) findViewById(R.id.Area);
 		
 		ActionBar actionBar = getSupportActionBar();
+		actionBar.setDisplayUseLogoEnabled(false);
 		actionBar.setDisplayHomeAsUpEnabled(false);
-//		actionBar.setHomeButtonEnabled(false);
-		actionBar.setDisplayShowHomeEnabled(false);
-		actionBar.setDisplayShowTitleEnabled(false);
+		actionBar.setHomeButtonEnabled(false);
+		actionBar.setDisplayShowTitleEnabled(true);
 		
 		bMapView = (MapView) findViewById(R.id.bmapsView);
 		bMapView.setBuiltInZoomControls(true);
@@ -102,16 +114,36 @@ public class Main extends SherlockActivity implements LocationCallBack,
 		bMapController = bMapView.getController();
 //		取得地图控制权
 		bMapController.setZoom(15);
+		bGraphicsOverlay = new GraphicsOverlay(bMapView);
 		
-		MyLocationManager.init(Main.this.getApplicationContext(), Main.this);
-		mylocation = MyLocationManager.getInstance();
-		
+//		MyLocationManager.init(Main.this.getApplicationContext(), Main.this);
+//		mylocation = MyLocationManager.getInstance();
+		bLocationClientOption.setOpenGps(true);
+		bLocationClientOption.setCoorType("bd09ll");
+		bLocationClientOption.setProdName("com.test01map");
+		bLocationClientOption.setScanSpan(5000);
+		bLocationClientOption.setPriority(LocationClientOption.NetWorkFirst);
+		bLocationClientOption.disableCache(true);
+		bLocationClient = new LocationClient(getApplicationContext());
+		bLocationClient.setLocOption(bLocationClientOption);
+		bLocationClient.registerLocationListener(testLocationListener);
+		bLocationClient.start();
+//		bLocationClient.requestLocation();
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 
+		
 		MenuInflater inflater = getSupportMenuInflater();
 		inflater.inflate(R.menu.main, menu);
+//		ShareActionProvider shareActionProvider = (ShareActionProvider) menu.findItem(R.id.menu_share).getActionProvider();
+//		shareActionProvider.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
+//		Intent shareIntent = new Intent();
+//		shareIntent.setAction(Intent.ACTION_SEND);
+//		shareIntent.setType("image/*");
+//        Uri uri = Uri.fromFile(getFileStreamPath("shared.png"));
+//        shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+//		shareActionProvider.setShareIntent(shareIntent);
 //		MenuCompat.setShowAsAction(menu.findItem(R.id.mapTypeToggleButton), 1);
 		mapTypeToggleButton = (ToggleButton) menu.findItem(R.id.mapTypeToggleButton).getActionView();
 		mapTypeToggleButton.setTextOn("卫星");
@@ -170,7 +202,7 @@ public class Main extends SherlockActivity implements LocationCallBack,
 					if (geopoints.size() > 2) {
 						if (polygon != null) {
 							polygon.delete();
-							polygon = new PolygonOverlay(geopoints, bMapView);
+							polygon = new PolygonOverlay(geopoints, bMapView, bGraphicsOverlay);
 							polygon.draw();
 						}
 					}
@@ -190,18 +222,15 @@ public class Main extends SherlockActivity implements LocationCallBack,
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				// TODO Auto-generated method stub
 				if (!isChecked) {
-//					buttonView.setText("手动取点");
-					mylocation.destoryLocationManager();
+					bLocationClient.stop();
 					setOnMapClickListener(true);
 				} else {
-//					buttonView.setText("自动定位");
-//					buttonView.setTextColor();
-					mylocation.addLocationManager();
+					bLocationClient.start();
 					setOnMapClickListener(false);
 				}
 			}
 		});
-		manulyToggleButton.setChecked(false);
+		manulyToggleButton.setChecked(true);
 		redoButton = (Button) menu.findItem(R.id.redoButton).getActionView();
 		redoButton.setText(R.string.redoButton);
 		redoButton.setOnClickListener(new OnClickListener() {
@@ -240,6 +269,7 @@ public class Main extends SherlockActivity implements LocationCallBack,
 				}
 			}
 		});
+		System.out.println("menu created");
 		return true;
 	}
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
@@ -275,6 +305,7 @@ public class Main extends SherlockActivity implements LocationCallBack,
 	@Override
 	protected void onResume() {
 		super.onResume();
+		System.out.println("resumed");
 	}
 
 	protected boolean isRouteDisplayed() {
@@ -284,23 +315,30 @@ public class Main extends SherlockActivity implements LocationCallBack,
 	public void setOnMapClickListener(boolean flag) {
 		if (flag) {
 //			map.setOnMapClickListener(this);
-			
+			bMapView.setOnClickListener(new OnClickListener() {
+				
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					
+				}
+			});			
 			bMapView.setOnTouchListener(new OnTouchListener() {
 				
 				public boolean onTouch(View v, MotionEvent event) {
 					// TODO Auto-generated method stub
 					int x = (int)event.getX();  
 			        int y = (int)event.getY();  
-			        GeoPoint geoPoint = bMapView.getProjection().fromPixels(x, y);  
+			        GeoPoint geoPoint = bMapView.getProjection().fromPixels(x, y);
+			        System.out.println(geoPoint);
 			        int xx = geoPoint.getLongitudeE6();  
 			        int yy = geoPoint.getLatitudeE6();
 			        pointFGps = new PointF(xx, yy);
 					listpoint.add(pointFGps);
 					geopoints.add(geoPoint);
-					markers.add(new MarkerOverlay(bMapView, geoPoint));
+					markers.add(new MarkerOverlay(bMapView, bGraphicsOverlay, geoPoint));
 					overlayAndtextShow();
-//			        Log.d("xxxxxxxxxxx", Integer.toString(xx));  
-//			        Log.d("yyyyyyyyyyy", Integer.toString(yy));  
+			        Log.d("xxxxxxxxxxx", Integer.toString(xx));  
+			        Log.d("yyyyyyyyyyy", Integer.toString(yy));  
 //			        return super.onTouchEvent(arg0);  
 					return false;
 				}
@@ -323,7 +361,7 @@ public class Main extends SherlockActivity implements LocationCallBack,
 //		pointFGps = new PointF((float)(pGps.latitude*1E6),(float)(pGps.longitude*1E6));
 		listpoint.add(pointFGps);
 		geopoints.add(pGps);
-		markers.add(new MarkerOverlay(bMapView, pGps));
+		markers.add(new MarkerOverlay(bMapView,bGraphicsOverlay, pGps));
 		bMapView.getController().animateTo(pGps);
 		overlayAndtextShow();
 	}
@@ -336,6 +374,7 @@ public class Main extends SherlockActivity implements LocationCallBack,
 //			polyline.remove();
 			if (polyline != null) {
 				polyline.delete();
+				System.out.println("-polyline");
 				polyline = null;
 			}
 			if (!markers.isEmpty()) {
@@ -347,6 +386,7 @@ public class Main extends SherlockActivity implements LocationCallBack,
 //			polyline.setPoints(geopoints);
 			if (Polygon && polygon != null) {
 				polygon.delete();
+				System.out.println("-polygon");
 				polygon = null;
 //				System.out.println(polygon);
 			}
@@ -354,29 +394,37 @@ public class Main extends SherlockActivity implements LocationCallBack,
 			TextArea.setText("A:0㎡");
 		}else {
 			markers.get(markers.size()-1).draw();
+			System.out.println("+marker");
 			if (polyline != null) {
 				polyline.delete();
-				polyline = new LineOverlay(geopoints, bMapView);
+				System.out.println("-polyline");
+				polyline = new LineOverlay(geopoints, bMapView, bGraphicsOverlay);
 				polyline.draw();
+				System.out.println("+polyline");
 			}else {
-				polyline = new LineOverlay(geopoints, bMapView);
+				polyline = new LineOverlay(geopoints, bMapView, bGraphicsOverlay);
 				polyline.draw();
+				
 			}
 			if (Polygon) {
 //				mapView.getOverlays().add(new PolygonOverlay(geopoints));
 				if (geopoints.size() > 2) {
 					if (polygon != null) {
 						polygon.delete();
+						System.out.println("-polygon");
 						polygon = null;
-						polygon = new PolygonOverlay(geopoints, bMapView);
+						polygon = new PolygonOverlay(geopoints, bMapView, bGraphicsOverlay);
 						polygon.draw();
+						System.out.println("+polygon");
 					}else {
-						polygon = new PolygonOverlay(geopoints, bMapView);
+						polygon = new PolygonOverlay(geopoints, bMapView, bGraphicsOverlay);
 						polygon.draw();
+						System.out.println("+polygon");
 					}
 				}else {
 					if (polygon != null) {
 						polygon.delete();
+						System.out.println("-polygon");
 						polygon = null;
 					}
 				}
@@ -397,4 +445,33 @@ public class Main extends SherlockActivity implements LocationCallBack,
 		super.onDestroy();
 		android.os.Process.killProcess(android.os.Process.myPid());
 	}
+	
+	public class TestLocationListener implements BDLocationListener {
+
+		public void onReceiveLocation(BDLocation location) {
+			// TODO Auto-generated method stub
+			System.out.println(location.getLocType());
+//			if (location == null) {
+//				return;
+//			}
+			pGps = new GeoPoint((int) (location.getLatitude() * 1E6),
+					(int) (location.getLongitude() * 1E6));
+//			pGps = new LatLng((locationGps.getLatitude()),(locationGps.getLongitude()));
+//			mapController.animateTo(pGps);
+			pointFGps = new PointF(pGps.getLatitudeE6(), pGps.getLongitudeE6());
+//			pointFGps = new PointF((float)(pGps.latitude*1E6),(float)(pGps.longitude*1E6));
+			listpoint.add(pointFGps);
+			geopoints.add(pGps);
+			markers.add(new MarkerOverlay(bMapView,bGraphicsOverlay, pGps));
+			bMapView.getController().animateTo(pGps);
+			overlayAndtextShow();
+		}
+
+		public void onReceivePoi(BDLocation poiLocation) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		
+	}	
 }

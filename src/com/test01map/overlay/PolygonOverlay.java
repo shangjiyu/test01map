@@ -16,7 +16,7 @@ import com.baidu.mapapi.map.GraphicsOverlay;
 import com.baidu.mapapi.map.Symbol;
 import com.baidu.platform.comapi.basestruct.GeoPoint;
 
-public class PolygonOverlay extends GraphicsOverlay {
+public class PolygonOverlay {
 
 //	List<GeoPoint> geopoints;
 	GeoPoint[] geoPoints;
@@ -26,9 +26,9 @@ public class PolygonOverlay extends GraphicsOverlay {
 	Graphic polygonGraphic;
 	MapView bMapView;
 	long longPolygonId;
+	GraphicsOverlay bGraphicsOverlay;
 	
-	public PolygonOverlay(List<GeoPoint> geopoints, MapView bMapView) {
-		super(bMapView);
+	public PolygonOverlay(List<GeoPoint> geopoints, MapView bMapView, GraphicsOverlay bGraphicsOverlay) {
 		this.geoPoints = new GeoPoint[(geopoints.size()+1)];
 		for (int i = 0; i < geopoints.size(); i++) {
 			geoPoints[i] = geopoints.get(i);
@@ -44,18 +44,20 @@ public class PolygonOverlay extends GraphicsOverlay {
 		polygonColor.alpha = 255;
 		polygonSymbol.setSurface(polygonColor, 1, 4);
 		this.polygonGraphic = new Graphic(polygonGeometry, polygonSymbol);
+		this.bGraphicsOverlay = bGraphicsOverlay;
 		this.bMapView = bMapView;
-		this.longPolygonId = this.setData(polygonGraphic);
+		this.longPolygonId = this.bGraphicsOverlay.setData(polygonGraphic);
 	}
 	
 	public long draw () {
-		this.bMapView.getOverlays().add(this);
+		this.bMapView.getOverlays().add(this.bGraphicsOverlay);
 		this.bMapView.refresh();
 		return this.longPolygonId;
 	}
 	
 	public void delete () {
-		this.removeGraphic(this.longPolygonId);
+		this.bGraphicsOverlay.removeGraphic(this.longPolygonId);
+		this.bMapView.refresh();
 	}
 	
 	/*@Override

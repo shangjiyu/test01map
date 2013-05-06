@@ -14,7 +14,7 @@ import com.baidu.platform.comapi.basestruct.GeoPoint;
 //import android.graphics.Paint;
 //import android.graphics.Point;
 
-public class LineOverlay extends GraphicsOverlay {
+public class LineOverlay {
 
 //	List<GeoPoint> geopoints;
 	GeoPoint[] geoPoints;
@@ -22,11 +22,11 @@ public class LineOverlay extends GraphicsOverlay {
 	Geometry lineGeometry;
 	Symbol lineSymbol;
 	Graphic lineGraphic;
+	GraphicsOverlay bGraphicsOverlay;
 	MapView bMapView;
 	long longPolylineId;
 
-	public LineOverlay(List<GeoPoint> geopoints, MapView bMapView) {
-		super(bMapView);
+	public LineOverlay(List<GeoPoint> geopoints, MapView bMapView, GraphicsOverlay bGraphicsOverlay) {
 		this.geoPoints = new GeoPoint[geopoints.size()];
 		for (int i = 0; i < geopoints.size(); i++) {
 			geoPoints[i] = geopoints.get(i);
@@ -41,18 +41,20 @@ public class LineOverlay extends GraphicsOverlay {
 		lineColor.alpha = 255;
 		lineSymbol.setLineSymbol(lineColor, 4);
 		this.lineGraphic = new Graphic(lineGeometry, lineSymbol);
+		this.bGraphicsOverlay = bGraphicsOverlay;
 		this.bMapView = bMapView;
-		this.longPolylineId = this.setData(lineGraphic);
+		this.longPolylineId = this.bGraphicsOverlay.setData(lineGraphic);
 	}
 	
 	public long draw () {
-		this.bMapView.getOverlays().add(this);
+		this.bMapView.getOverlays().add(this.bGraphicsOverlay);
 		this.bMapView.refresh();
 		return this.longPolylineId;
 	}
 	
 	public void delete () {
-		this.removeGraphic(this.longPolylineId);
+		this.bGraphicsOverlay.removeGraphic(this.longPolylineId);
+		this.bMapView.refresh();
 	}
 	
 //	@Override

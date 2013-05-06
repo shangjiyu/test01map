@@ -392,7 +392,7 @@ int string exit 0x7f090015
 int string hello_world 0x7f09000e
 int string manulyToggleButton 0x7f09001a
 int string mapTypeToggleButton 0x7f090019
-int string menu_settings 0x7f09000f
+int string menu_share 0x7f09000f
 int string redoButton 0x7f090017
 int string start 0x7f090013
 int string stop 0x7f090014

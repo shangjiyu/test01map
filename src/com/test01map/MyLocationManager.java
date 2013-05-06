@@ -41,14 +41,14 @@ public class MyLocationManager {
 	public void addLocationManager(){
 		gpsLocationManager = (LocationManager) mContext
 				.getSystemService(Context.LOCATION_SERVICE);
-		Location gpsLocation = gpsLocationManager
-				.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//		Location gpsLocation = gpsLocationManager
+//				.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 		gpsLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
 				MINTIME, MININSTANCE, locationListener);
 		networkLocationManager = (LocationManager) mContext
 				.getSystemService(Context.LOCATION_SERVICE);
-		Location networkLocation = gpsLocationManager
-				.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//		Location networkLocation = gpsLocationManager
+//				.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 		networkLocationManager.requestLocationUpdates(
 				LocationManager.NETWORK_PROVIDER, MINTIME, MININSTANCE,
 				locationListener);
@@ -95,7 +95,7 @@ public class MyLocationManager {
 	
 	public void destoryLocationManager(){
 		gpsLocationManager.removeUpdates(locationListener);
-//		networkLocationManager.removeUpdates(locationListener);
+		networkLocationManager.removeUpdates(locationListener);
 	}
 
 
