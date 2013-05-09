@@ -9,9 +9,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PointF;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,6 +19,9 @@ import android.view.View.OnTouchListener;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -28,7 +31,6 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.actionbarsherlock.widget.ShareActionProvider;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
@@ -98,14 +100,29 @@ public class Main extends SherlockActivity implements LocationCallBack,
 		bMapManager.init("31EB3BBC63C599FB0D5C6F9E2E2BE3FFE4E726FB", null);
 		setContentView(R.layout.main);
 		
+		View customNav = LayoutInflater.from(this).inflate(R.layout.custom_abs_view, null);
+		((ImageView) customNav.findViewById(R.id.menu_share)).setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				System.out.println("share action");
+				Intent shareIntent = new Intent();
+				shareIntent.setAction(Intent.ACTION_SEND);
+				shareIntent.setType("text/plain");
+				startActivity(Intent.createChooser(shareIntent, "分享到"));
+			}
+		});
 		TextDistance = (TextView) findViewById(R.id.Distance);
 		TextArea = (TextView) findViewById(R.id.Area);
 		
 		ActionBar actionBar = getSupportActionBar();
-		actionBar.setDisplayUseLogoEnabled(false);
-		actionBar.setDisplayHomeAsUpEnabled(false);
-		actionBar.setHomeButtonEnabled(false);
+//		actionBar.setDisplayUseLogoEnabled(false);
+//		actionBar.setDisplayHomeAsUpEnabled(false);
+//		actionBar.setHomeButtonEnabled(false);
 		actionBar.setDisplayShowTitleEnabled(true);
+		actionBar.setCustomView(customNav);
+		actionBar.setDisplayShowCustomEnabled(true);
+//		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME|ActionBar.DISPLAY_SHOW_CUSTOM);
 		
 		bMapView = (MapView) findViewById(R.id.bmapsView);
 		bMapView.setBuiltInZoomControls(true);
@@ -141,10 +158,9 @@ public class Main extends SherlockActivity implements LocationCallBack,
 //		Intent shareIntent = new Intent();
 //		shareIntent.setAction(Intent.ACTION_SEND);
 //		shareIntent.setType("image/*");
-//        Uri uri = Uri.fromFile(getFileStreamPath("shared.png"));
-//        shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+////        Uri uri = Uri.fromFile(getFileStreamPath("shared.png"));
+////        shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
 //		shareActionProvider.setShareIntent(shareIntent);
-//		MenuCompat.setShowAsAction(menu.findItem(R.id.mapTypeToggleButton), 1);
 		mapTypeToggleButton = (ToggleButton) menu.findItem(R.id.mapTypeToggleButton).getActionView();
 		mapTypeToggleButton.setTextOn("卫星");
 		mapTypeToggleButton.setTextOff("普通");
