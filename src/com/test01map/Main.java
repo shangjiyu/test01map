@@ -19,9 +19,7 @@ import android.view.View.OnTouchListener;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -37,6 +35,9 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.BMapManager;
 import com.baidu.mapapi.map.GraphicsOverlay;
+import com.baidu.mapapi.map.MKOLUpdateElement;
+import com.baidu.mapapi.map.MKOfflineMap;
+import com.baidu.mapapi.map.MKOfflineMapListener;
 import com.baidu.mapapi.map.MapController;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.platform.comapi.basestruct.GeoPoint;
@@ -53,27 +54,23 @@ public class Main extends SherlockActivity implements LocationCallBack,
 		OnClickListener {
 
 	GeoPoint p, pGps;
-//	LatLng p,pGps;
 	LineOverlay polyline = null;
 	PolygonOverlay polygon = null;
-//	List<Overlay> listOfOverlays = new ArrayList<Overlay>();
+	
 	List<PointF> listpoint = new ArrayList<PointF>();
 	List<GeoPoint> geopoints = new ArrayList<GeoPoint>();
-//	List<LatLng> geopoints = new ArrayList<LatLng>();
 	List<Location> locations = new ArrayList<Location>();
 	List<MarkerOverlay> markers = new ArrayList<MarkerOverlay>();
+	
 	boolean addpoint = false;
-//	GoogleMap map;
 	BMapManager bMapManager;
 	MapView bMapView;
 	MapController bMapController;
+	MKOfflineMap bOfflineMap = null;
 	GraphicsOverlay bGraphicsOverlay;
 	LocationClient bLocationClient;
 	LocationClientOption bLocationClientOption = new LocationClientOption();
 	TestLocationListener testLocationListener = new TestLocationListener();
-//	MapView mapView;
-//	GoogleMap mapView
-//	MapOverlay mapOverlay;
 	PointF pointF, pointFGps;
 
 	Button redoButton;
@@ -132,6 +129,109 @@ public class Main extends SherlockActivity implements LocationCallBack,
 //		取得地图控制权
 		bMapController.setZoom(15);
 		bGraphicsOverlay = new GraphicsOverlay(bMapView);
+		
+//		offline Map
+		bOfflineMap = new MKOfflineMap();
+		bOfflineMap.init(bMapController, new MKOfflineMapListener() {
+			
+			public void onGetOfflineMapState(int type, int state) {
+				AlertDialog.Builder alertbBuilder = new AlertDialog.Builder(Main.this);
+				// TODO Auto-generated method stub
+				switch (type) {
+				case MKOfflineMap.TYPE_DOWNLOAD_UPDATE:
+					{
+						// Log.d("OfflineDemo", String.format("cityid:%d update", state));
+						MKOLUpdateElement update = bOfflineMap.getUpdateInfo(state);
+						if ( update != null ){
+							alertbBuilder.setTitle("地图离线包更新")
+							.setMessage(update.cityID+","+update.ratio)
+							.setPositiveButton("更新", new DialogInterface.OnClickListener() {
+								
+								public void onClick(DialogInterface dialog, int which) {
+									// TODO Auto-generated method stub
+	//								android.os.Process.killProcess(android.os.Process.myPid());
+								}
+							})
+							.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+								
+								public void onClick(DialogInterface dialog, int which) {
+									// TODO Auto-generated method stub
+									dialog.cancel();
+								}
+							}).create();
+						alertbBuilder.show();
+						}
+	//					    mText.setText(String.format("%s : %d%%", update.cityName, update.ratio));
+					}
+					break;
+					case MKOfflineMap.TYPE_NEW_OFFLINE:
+					{
+						alertbBuilder.setTitle("地图更新")
+						.setMessage("新安装离线地图包"+state+"个")
+						.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+							
+							public void onClick(DialogInterface dialog, int which) {
+								// TODO Auto-generated method stub
+//								android.os.Process.killProcess(android.os.Process.myPid());
+							}
+						})
+						.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+							
+							public void onClick(DialogInterface dialog, int which) {
+								// TODO Auto-generated method stub
+								dialog.cancel();
+							}
+						}).create();
+					alertbBuilder.show();
+					}
+					case MKOfflineMap.TYPE_VER_UPDATE:
+					{
+						MKOLUpdateElement element = bOfflineMap.getUpdateInfo(state);
+						if (element != null) {
+							alertbBuilder.setTitle("离线地图更新")
+							.setMessage(element.cityName+"有新的离线地图版本")
+							.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+								
+								public void onClick(DialogInterface dialog, int which) {
+									// TODO Auto-generated method stub
+//									android.os.Process.killProcess(android.os.Process.myPid());
+								}
+							})
+							.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+								
+								public void onClick(DialogInterface dialog, int which) {
+									// TODO Auto-generated method stub
+									dialog.cancel();
+								}
+							}).create();
+							alertbBuilder.show();
+						}
+					}
+					break;
+				}
+			}
+		});
+		int number = bOfflineMap.scan();
+		if (number != 0) {
+			AlertDialog.Builder alertBuilder = new AlertDialog.Builder(Main.this);
+			alertBuilder.setTitle("离线包导入")
+			.setMessage("已导入"+number+"个城市")
+			.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+								
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+//									android.os.Process.killProcess(android.os.Process.myPid());
+				}
+			})
+			.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+				
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+					dialog.cancel();
+				}
+			}).create();
+			alertBuilder.show();
+		}
 		
 //		MyLocationManager.init(Main.this.getApplicationContext(), Main.this);
 //		mylocation = MyLocationManager.getInstance();
