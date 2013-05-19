@@ -29,6 +29,7 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.widget.ShareActionProvider;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
@@ -97,25 +98,30 @@ public class Main extends SherlockActivity implements LocationCallBack,
 		bMapManager.init("31EB3BBC63C599FB0D5C6F9E2E2BE3FFE4E726FB", null);
 		setContentView(R.layout.main);
 		
+		TextDistance = (TextView)findViewById(R.id.Distance);
+		TextArea = (TextView)findViewById(R.id.Area);
+		
 		View customNav = LayoutInflater.from(this).inflate(R.layout.custom_abs_view, null);
 		((ImageView) customNav.findViewById(R.id.menu_share)).setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				System.out.println("share action");
+//				System.out.println("share action");
 				Intent shareIntent = new Intent();
 				shareIntent.setAction(Intent.ACTION_SEND);
+				shareIntent.putExtra(Intent.EXTRA_TEXT, "面积有："+TextArea.getText()+"距离有："+TextDistance.getText());
 				shareIntent.setType("text/plain");
 				startActivity(Intent.createChooser(shareIntent, "分享到"));
 			}
 		});
-		TextDistance = (TextView) findViewById(R.id.Distance);
-		TextArea = (TextView) findViewById(R.id.Area);
+		/*ShareActionProvider mShareActionProvider = (ShareActionProvider)((MenuItem) customNav.findViewById(R.id.menu_share)).getActionProvider();
+		Intent shareIntent = new Intent();
+		shareIntent.setAction(Intent.ACTION_SEND);
+		shareIntent.putExtra(Intent.EXTRA_TEXT, "面积有："+TextArea.getText()+"距离有："+TextDistance.getText());
+		shareIntent.setType("text/plain");
+		mShareActionProvider.setShareIntent(shareIntent);*/
 		
 		ActionBar actionBar = getSupportActionBar();
-//		actionBar.setDisplayUseLogoEnabled(false);
-//		actionBar.setDisplayHomeAsUpEnabled(false);
-//		actionBar.setHomeButtonEnabled(false);
 		actionBar.setDisplayShowTitleEnabled(true);
 		actionBar.setCustomView(customNav);
 		actionBar.setDisplayShowCustomEnabled(true);
@@ -123,7 +129,7 @@ public class Main extends SherlockActivity implements LocationCallBack,
 		
 		bMapView = (MapView) findViewById(R.id.bmapsView);
 		bMapView.setBuiltInZoomControls(true);
-		bMapView.setSatellite(true);
+		bMapView.setSatellite(false);
 //		设置启用内置的缩放控件
 		bMapController = bMapView.getController();
 //		取得地图控制权
@@ -233,8 +239,6 @@ public class Main extends SherlockActivity implements LocationCallBack,
 			alertBuilder.show();
 		}
 		
-//		MyLocationManager.init(Main.this.getApplicationContext(), Main.this);
-//		mylocation = MyLocationManager.getInstance();
 		bLocationClientOption.setOpenGps(true);
 		bLocationClientOption.setCoorType("bd09ll");
 		bLocationClientOption.setProdName("com.test01map");
@@ -296,7 +300,7 @@ public class Main extends SherlockActivity implements LocationCallBack,
 //				bMapView.refresh();
 			}
 		});
-		mapTypeToggleButton.setChecked(true);
+		mapTypeToggleButton.setChecked(false);
 		areaToggleButton = (ToggleButton) menu.findItem(R.id.areaToggleButton).getActionView();
 		areaToggleButton.setTextOff("距离");
 		areaToggleButton.setTextOn("面积");
