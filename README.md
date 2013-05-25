@@ -1,15 +1,15 @@
-基于位置服务的土地面积丈量和路线里程车辆工具
+基于位置服务的土地面积丈量和路线里程测量工具
 ====================================================
 
 毕设好么，不会好么...
 -----------------------------------
   
-### com.test01.map
+### com.test01map
  
 ### 420地震了好么
 
 ### overlay
-		v1版本的mapView.getOverlay在v2里面没了怎破...        
+		v1版本的mapView.getOverlay在v2里面没了怎破...（改用百度地图）      
 ### 多行文本框  
 		多行文本妹
 		妹
@@ -27,8 +27,8 @@
 
     	}
 ### 链接
-1.[点击这里你可以链接到www.google.com](http://www.google.com)<br />
-2.[点击这里我你可以链接到我的博客](http://guoyunsky.iteye.com)<br />
+1.[www.google.com](http://www.google.com)<br />
+2.[yaom.tk](http://www.yaom.tk)<br />
 
 ###只是显示图片
 ![github](http://github.com/unicorn.png "github")
