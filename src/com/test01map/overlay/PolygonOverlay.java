@@ -39,9 +39,9 @@ public class PolygonOverlay {
 		this.polygonSymbol = new Symbol();
 		Symbol.Color polygonColor = polygonSymbol.new Color();
 		polygonColor.red = 0;
-		polygonColor.green = 0;
+		polygonColor.green = 255;
 		polygonColor.blue = 0;
-		polygonColor.alpha = 255;
+		polygonColor.alpha = 126;
 		polygonSymbol.setSurface(polygonColor, 1, 4);
 		this.polygonGraphic = new Graphic(polygonGeometry, polygonSymbol);
 		this.bGraphicsOverlay = bGraphicsOverlay;

@@ -134,6 +134,7 @@ public class Main extends SherlockActivity implements LocationCallBack,
 		bMapController = bMapView.getController();
 //		取得地图控制权
 		bMapController.setZoom(15);
+//		bMapController.animateTo(new GeoPoint(120047134,30231811));
 		bGraphicsOverlay = new GraphicsOverlay(bMapView);
 		
 //		offline Map
@@ -243,7 +244,7 @@ public class Main extends SherlockActivity implements LocationCallBack,
 		bLocationClientOption.setCoorType("bd09ll");
 		bLocationClientOption.setProdName("com.test01map");
 		bLocationClientOption.setScanSpan(5000);
-		bLocationClientOption.setPriority(LocationClientOption.NetWorkFirst);
+		bLocationClientOption.setPriority(LocationClientOption.GpsFirst);
 		bLocationClientOption.disableCache(true);
 		bLocationClient = new LocationClient(getApplicationContext());
 		bLocationClient.setLocOption(bLocationClientOption);
@@ -327,9 +328,10 @@ public class Main extends SherlockActivity implements LocationCallBack,
 						}
 					}
 					dStr = Conversion.ConversionA(CaculationArea.calculateArea(listpoint));
-//					dStr = Conversion.ConversionA(CaculationArea.calculateArea(geopoints));
+//					dStr = Conversion.ConversionA(CaculationArea.calculateArea(areaPointFs));
 					TextArea.setText("A:" + dStr);
 				}
+				overlayAndtextShow();
 //				bMapView.refresh();
 			}
 		});
@@ -348,6 +350,7 @@ public class Main extends SherlockActivity implements LocationCallBack,
 					bLocationClient.start();
 					setOnMapClickListener(false);
 				}
+				overlayAndtextShow();
 			}
 		});
 		manulyToggleButton.setChecked(true);
@@ -389,7 +392,7 @@ public class Main extends SherlockActivity implements LocationCallBack,
 				}
 			}
 		});
-		System.out.println("menu created");
+//		System.out.println("menu created");
 		return true;
 	}
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
@@ -446,20 +449,30 @@ public class Main extends SherlockActivity implements LocationCallBack,
 				
 				public boolean onTouch(View v, MotionEvent event) {
 					// TODO Auto-generated method stub
-					int x = (int)event.getX();  
-			        int y = (int)event.getY();  
-			        GeoPoint geoPoint = bMapView.getProjection().fromPixels(x, y);
-			        System.out.println(geoPoint);
-			        int xx = geoPoint.getLongitudeE6();  
-			        int yy = geoPoint.getLatitudeE6();
-			        pointFGps = new PointF(xx, yy);
-					listpoint.add(pointFGps);
-					geopoints.add(geoPoint);
-					markers.add(new MarkerOverlay(bMapView, bGraphicsOverlay, geoPoint));
-					overlayAndtextShow();
-			        Log.d("xxxxxxxxxxx", Integer.toString(xx));  
-			        Log.d("yyyyyyyyyyy", Integer.toString(yy));  
-//			        return super.onTouchEvent(arg0);  
+					switch (event.getAction()) {
+					case MotionEvent.ACTION_DOWN:
+					{
+						int x = (int)event.getX();  
+				        int y = (int)event.getY();  
+				        GeoPoint geoPoint = bMapView.getProjection().fromPixels(x, y);
+				        System.out.println(geoPoint);
+				        int xx = geoPoint.getLongitudeE6();  
+				        int yy = geoPoint.getLatitudeE6();
+				        pointFGps = new PointF(xx, yy);
+						listpoint.add(pointFGps);
+						geopoints.add(geoPoint);
+						markers.add(new MarkerOverlay(bMapView, bGraphicsOverlay, geoPoint));
+						overlayAndtextShow();
+				        Log.d("xxxxxxxxxxx", Integer.toString(xx));  
+				        Log.d("yyyyyyyyyyy", Integer.toString(yy));  
+//				        return super.onTouchEvent(arg0);  
+//						return false;
+					}	
+						break;
+
+					default:
+						break;
+					}
 					return false;
 				}
 			});
@@ -552,9 +565,19 @@ public class Main extends SherlockActivity implements LocationCallBack,
 				TextArea.setText("A:" + dStr);
 			}else {
 				TextArea.setText("A:0㎡");
-			}	
-			dStr = Conversion
-					.ConversionD(CaculationDistance.getDistance(listpoint));
+			}
+			if (Polygon) {
+				List<PointF> areaPointFs = new ArrayList<PointF>();
+				areaPointFs.addAll(listpoint);
+				if (listpoint.size() != 0) {
+					areaPointFs.add(listpoint.get(0));
+				}
+				dStr = Conversion
+						.ConversionD(CaculationDistance.getDistance(areaPointFs));
+			}else {
+				dStr = Conversion
+						.ConversionD(CaculationDistance.getDistance(listpoint));
+			}
 			TextDistance.setText("D:" + dStr);
 		}
 
