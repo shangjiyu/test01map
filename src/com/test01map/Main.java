@@ -335,7 +335,7 @@ public class Main extends SherlockActivity implements LocationCallBack,
 //				bMapView.refresh();
 			}
 		});
-		areaToggleButton.setChecked(true);
+		areaToggleButton.setChecked(false);
 		manulyToggleButton = (ToggleButton) menu.findItem(R.id.manulyToggleButton).getActionView();
 		manulyToggleButton.setTextOff("手动");
 		manulyToggleButton.setTextOn("定位");
@@ -458,7 +458,8 @@ public class Main extends SherlockActivity implements LocationCallBack,
 				        System.out.println(geoPoint);
 				        int xx = geoPoint.getLongitudeE6();  
 				        int yy = geoPoint.getLatitudeE6();
-				        pointFGps = new PointF(xx, yy);
+//				        pointFGps = new PointF(xx, yy);
+				        pointFGps = new PointF(yy, xx);
 						listpoint.add(pointFGps);
 						geopoints.add(geoPoint);
 						markers.add(new MarkerOverlay(bMapView, bGraphicsOverlay, geoPoint));
@@ -466,12 +467,10 @@ public class Main extends SherlockActivity implements LocationCallBack,
 				        Log.d("xxxxxxxxxxx", Integer.toString(xx));  
 				        Log.d("yyyyyyyyyyy", Integer.toString(yy));  
 //				        return super.onTouchEvent(arg0);  
-//						return false;
+//						return true;
 					}	
-						break;
-
-					default:
-						break;
+					break;
+					
 					}
 					return false;
 				}
