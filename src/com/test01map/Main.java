@@ -29,7 +29,6 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.actionbarsherlock.widget.ShareActionProvider;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
@@ -95,7 +94,8 @@ public class Main extends SherlockActivity implements LocationCallBack,
 //		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		
 		bMapManager = new BMapManager(getApplication());
-		bMapManager.init("31EB3BBC63C599FB0D5C6F9E2E2BE3FFE4E726FB", null);
+//		bMapManager.init("31EB3BBC63C599FB0D5C6F9E2E2BE3FFE4E726FB", null);
+		bMapManager.init("3164354232f7313b61bd70dfc5b58145", null);
 		setContentView(R.layout.main);
 		
 		TextDistance = (TextView)findViewById(R.id.Distance);
@@ -418,9 +418,52 @@ public class Main extends SherlockActivity implements LocationCallBack,
 				}).create();
 			alertbBuilder.show();
 			break;
-
-		default:
-			break;
+//		case R.id.redoButton:
+//		{
+//			redoButton = (Button) item.getActionView();
+//			redoButton.setText(R.string.redoButton);
+//			redoButton.setOnClickListener(new OnClickListener() {
+//				
+//				public void onClick(View v) {
+//					// TODO Auto-generated method stub
+//					if (!geopoints.isEmpty()) {
+//						listpoint.remove(listpoint.size() - 1);
+//						geopoints.remove(geopoints.size() - 1);
+//						markers.get(markers.size()-1).delete();
+//						markers.remove(markers.size()-1);
+//						overlayAndtextShow();
+//					} else {
+//						Toast.makeText(MyApplication.getInstance(), "已经删完...",
+//								Toast.LENGTH_SHORT).show();
+//					}
+//				}
+//			});
+//		}
+//		break;
+//		case R.id.clearButton:
+//		{
+//			cleanButton = (Button) item.getActionView();
+//			cleanButton.setText(R.string.clearButton);
+//			cleanButton.setOnClickListener(new OnClickListener() {
+//				
+//				public void onClick(View v) {
+//					// TODO Auto-generated method stub
+//					if (!geopoints.isEmpty()) {
+//						listpoint.removeAll(listpoint);
+//						geopoints.removeAll(geopoints);
+//						for (int i = 0; i < markers.size(); i++) {
+//							markers.get(i).delete();
+//						}
+//						markers.removeAll(markers);
+//						overlayAndtextShow();
+//					} else {
+//						Toast.makeText(MyApplication.getInstance(), "已经删空...",
+//								Toast.LENGTH_SHORT).show();
+//					}
+//				}
+//			});
+//		}
+//		break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -470,7 +513,8 @@ public class Main extends SherlockActivity implements LocationCallBack,
 //						return true;
 					}	
 					break;
-					
+//					case MotionEvent.ACTION_MOVE:
+//						return false;
 					}
 					return false;
 				}
