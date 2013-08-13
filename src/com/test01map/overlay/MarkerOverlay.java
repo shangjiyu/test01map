@@ -14,6 +14,13 @@ import com.baidu.mapapi.map.Symbol;
 import com.baidu.platform.comapi.basestruct.GeoPoint;
 import com.baidu.mapapi.map.MapView;
 
+/**
+ * @ClassName: MarkerOverlay
+ * @Description: TODO(点标记)
+ * @author jiyu
+ * @date 2013-8-12 下午9:15:05
+ *
+ */
 public class MarkerOverlay {
 	// private GeoPoint p;
 //	List<GeoPoint> geopoints;
@@ -42,12 +49,26 @@ public class MarkerOverlay {
 		this.longMarkerId = this.bGraphicsOverlay.setData(markerGraphic);
 	}
 	
+	/**
+	 * @Title: draw
+	 * @Description: TODO(画到地图上去)
+	 * @param     设定文件
+	 * @return void    返回类型
+	 * @throws
+	 */
 	public void draw () {
 		this.bMapView.getOverlays().add(this.bGraphicsOverlay);
 		this.bMapView.refresh();
 //		return this.longMarkerId;
 	}
 	
+	/**
+	 * @Title: delete
+	 * @Description: TODO(从地图上删掉)
+	 * @param     设定文件
+	 * @return void    返回类型
+	 * @throws
+	 */
 	public void delete () {
 		this.bGraphicsOverlay.removeGraphic(this.longMarkerId);
 		this.bMapView.refresh();

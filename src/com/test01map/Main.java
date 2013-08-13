@@ -41,7 +41,6 @@ import com.baidu.mapapi.map.MKOfflineMapListener;
 import com.baidu.mapapi.map.MapController;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.platform.comapi.basestruct.GeoPoint;
-
 import com.test01map.MyLocationManager.LocationCallBack;
 import com.test01map.caculation.CaculationArea;
 import com.test01map.caculation.CaculationDistance;
@@ -50,6 +49,13 @@ import com.test01map.overlay.MarkerOverlay;
 import com.test01map.overlay.PolygonOverlay;
 import com.test01map.tools.Conversion;
 
+/**
+ * @ClassName: Main
+ * @Description: TODO(展示一张地图，并跟踪设备位置实时的添加到地图上)
+ * @author jiyu
+ * @date 2013-8-12 下午9:04:10
+ *
+ */
 public class Main extends SherlockActivity implements LocationCallBack,
 		OnClickListener {
 
@@ -468,12 +474,6 @@ public class Main extends SherlockActivity implements LocationCallBack,
 		return super.onOptionsItemSelected(item);
 	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		System.out.println("resumed");
-	}
-
 	protected boolean isRouteDisplayed() {
 		return false;
 	}
@@ -525,6 +525,7 @@ public class Main extends SherlockActivity implements LocationCallBack,
 		
 	}
 	public void onClick(View v) {
+	
 	}
 
 	public void onCurrentLocation(Location locationGps) {
@@ -543,11 +544,7 @@ public class Main extends SherlockActivity implements LocationCallBack,
 	}
 
 	void overlayAndtextShow() {
-//		mapView.getOverlays().add(new LineOverlay(geopoints));
-//		mapView.getOverlays().add(new MarkerOverlay(geopoints));
-//		System.out.println(geopoints);
 		if (geopoints.isEmpty()) {
-//			polyline.remove();
 			if (polyline != null) {
 				polyline.delete();
 				System.out.println("-polyline");
@@ -559,42 +556,39 @@ public class Main extends SherlockActivity implements LocationCallBack,
 				}
 				markers.remove(markers);
 			}
-//			polyline.setPoints(geopoints);
 			if (Polygon && polygon != null) {
 				polygon.delete();
 				System.out.println("-polygon");
 				polygon = null;
-//				System.out.println(polygon);
 			}
 			TextDistance.setText("D:0m");
 			TextArea.setText("A:0㎡");
 		}else {
-			markers.get(markers.size()-1).draw();
+//			markers.get(markers.size()-1).draw();
 			System.out.println("+marker");
 			if (polyline != null) {
 				polyline.delete();
 				System.out.println("-polyline");
 				polyline = new LineOverlay(geopoints, bMapView, bGraphicsOverlay);
-				polyline.draw();
+//				polyline.draw();
 				System.out.println("+polyline");
 			}else {
 				polyline = new LineOverlay(geopoints, bMapView, bGraphicsOverlay);
-				polyline.draw();
+//				polyline.draw();
 				
 			}
 			if (Polygon) {
-//				mapView.getOverlays().add(new PolygonOverlay(geopoints));
 				if (geopoints.size() > 2) {
 					if (polygon != null) {
 						polygon.delete();
 						System.out.println("-polygon");
 						polygon = null;
 						polygon = new PolygonOverlay(geopoints, bMapView, bGraphicsOverlay);
-						polygon.draw();
+//						polygon.draw();
 						System.out.println("+polygon");
 					}else {
 						polygon = new PolygonOverlay(geopoints, bMapView, bGraphicsOverlay);
-						polygon.draw();
+//						polygon.draw();
 						System.out.println("+polygon");
 					}
 				}else {
@@ -626,10 +620,34 @@ public class Main extends SherlockActivity implements LocationCallBack,
 
 		bMapView.refresh();
 	}
-
+	
+	@Override
 	protected void onDestroy() {
+		bMapView.destroy();
+		if (bMapManager != null) {
+			bMapManager.destroy();
+			bMapManager = null;
+		}
 		super.onDestroy();
 		android.os.Process.killProcess(android.os.Process.myPid());
+	}
+	
+	@Override
+	protected void onPause(){
+		bMapView.onPause();
+		if (bMapManager!=null) {
+			bMapManager.stop();
+		}
+		super.onPause();
+	}
+	
+	@Override
+	protected void onResume(){
+		bMapView.onResume();
+		if (bMapManager!=null) {
+			bMapManager.start();
+		}
+		super.onResume();
 	}
 	
 	public class TestLocationListener implements BDLocationListener {

@@ -2,3 +2,4 @@ bin
 project.properties
 *.class
 /AndroidManifest.xml
+/doc

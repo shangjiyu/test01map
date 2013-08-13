@@ -3,10 +3,18 @@ package com.test01map.tools;
 import java.text.DecimalFormat;
 
 
+/**
+ * @ClassName: Conversion
+ * @Description: TODO(此类用以转换计算地图覆盖物所展示的距离和面积)
+ * @author jiyu
+ * @date 2013-8-12 下午9:01:20
+ *
+ */
 public class Conversion {
 
 	public static String ConversionD(int nub){
-		DecimalFormat dt=(DecimalFormat) DecimalFormat.getInstance(); //��ø�ʽ�������
+		//转换距离
+		DecimalFormat dt=(DecimalFormat) DecimalFormat.getInstance();
 		dt.applyPattern("0");
 		double i = nub;
 		String mOrkm = dt.format(i) + "m";
@@ -19,7 +27,8 @@ public class Conversion {
 	}
 	
 	public static String ConversionA(double nub){
-		DecimalFormat dt=(DecimalFormat) DecimalFormat.getInstance(); //��ø�ʽ�������
+		//转换面积
+		DecimalFormat dt=(DecimalFormat) DecimalFormat.getInstance(); 
 		dt.applyPattern("0");
 		double i = nub;
 		String mOrkm =dt.format(i) + "㎡";
