@@ -12,10 +12,8 @@ import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Button;
@@ -35,6 +33,7 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.BMapManager;
 import com.baidu.mapapi.map.GraphicsOverlay;
+import com.baidu.mapapi.map.MKMapTouchListener;
 import com.baidu.mapapi.map.MKOLUpdateElement;
 import com.baidu.mapapi.map.MKOfflineMap;
 import com.baidu.mapapi.map.MKOfflineMapListener;
@@ -56,8 +55,7 @@ import com.test01map.tools.Conversion;
  * @date 2013-8-12 下午9:04:10
  *
  */
-public class Main extends SherlockActivity implements LocationCallBack,
-		OnClickListener {
+public class Main extends SherlockActivity implements LocationCallBack {
 
 	GeoPoint p, pGps;
 	LineOverlay polyline = null;
@@ -100,7 +98,6 @@ public class Main extends SherlockActivity implements LocationCallBack,
 //		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		
 		bMapManager = new BMapManager(getApplication());
-//		bMapManager.init("31EB3BBC63C599FB0D5C6F9E2E2BE3FFE4E726FB", null);
 		bMapManager.init("3164354232f7313b61bd70dfc5b58145", null);
 		setContentView(R.layout.main);
 		
@@ -480,52 +477,40 @@ public class Main extends SherlockActivity implements LocationCallBack,
 
 	public void setOnMapClickListener(boolean flag) {
 		if (flag) {
-//			map.setOnMapClickListener(this);
-			bMapView.setOnClickListener(new OnClickListener() {
+			MKMapTouchListener mapTouchListener = new MKMapTouchListener() {
 				
-				public void onClick(View v) {
+				@Override
+				public void onMapLongClick(GeoPoint arg0) {
 					// TODO Auto-generated method stub
 					
 				}
-			});			
-			bMapView.setOnTouchListener(new OnTouchListener() {
 				
-				public boolean onTouch(View v, MotionEvent event) {
+				@Override
+				public void onMapDoubleClick(GeoPoint arg0) {
 					// TODO Auto-generated method stub
-					switch (event.getAction()) {
-					case MotionEvent.ACTION_DOWN:
-					{
-						int x = (int)event.getX();  
-				        int y = (int)event.getY();  
-				        GeoPoint geoPoint = bMapView.getProjection().fromPixels(x, y);
-				        System.out.println(geoPoint);
-				        int xx = geoPoint.getLongitudeE6();  
-				        int yy = geoPoint.getLatitudeE6();
-//				        pointFGps = new PointF(xx, yy);
-				        pointFGps = new PointF(yy, xx);
-						listpoint.add(pointFGps);
-						geopoints.add(geoPoint);
-						markers.add(new MarkerOverlay(bMapView, bGraphicsOverlay, geoPoint));
-						overlayAndtextShow();
-				        Log.d("xxxxxxxxxxx", Integer.toString(xx));  
-				        Log.d("yyyyyyyyyyy", Integer.toString(yy));  
-//				        return super.onTouchEvent(arg0);  
-//						return true;
-					}	
-					break;
-//					case MotionEvent.ACTION_MOVE:
-//						return false;
-					}
-					return false;
+					
 				}
-			});
+				
+				@Override
+				public void onMapClick(GeoPoint geoPoint) {
+					// TODO Auto-generated method stub
+					System.out.println(geoPoint);
+			        int xx = geoPoint.getLongitudeE6();  
+			        int yy = geoPoint.getLatitudeE6();
+			        pointFGps = new PointF(yy, xx);
+					listpoint.add(pointFGps);
+					geopoints.add(geoPoint);
+					markers.add(new MarkerOverlay(bMapView, bGraphicsOverlay, geoPoint));
+					overlayAndtextShow();
+			        Log.d("xxxxxxxxxxx", Integer.toString(xx));  
+			        Log.d("yyyyyyyyyyy", Integer.toString(yy)); 
+				}
+			};
+			bMapView.regMapTouchListner(mapTouchListener);
 		}else {
 			 bMapView.setOnTouchListener(null);
 		}
 		
-	}
-	public void onClick(View v) {
-	
 	}
 
 	public void onCurrentLocation(Location locationGps) {

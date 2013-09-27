@@ -3,3 +3,4 @@ project.properties
 *.class
 /AndroidManifest.xml
 /doc
+/gen
