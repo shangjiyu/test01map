@@ -7,46 +7,35 @@ package com.test01map.overlay;
 //import android.graphics.Paint;
 //import android.graphics.Point;
 
-import com.baidu.mapapi.map.Geometry;
-import com.baidu.mapapi.map.Graphic;
-import com.baidu.mapapi.map.GraphicsOverlay;
-import com.baidu.mapapi.map.Symbol;
-import com.baidu.platform.comapi.basestruct.GeoPoint;
+import java.util.ArrayList;
+import java.util.List;
+
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+
+import com.baidu.mapapi.map.ItemizedOverlay;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.OverlayItem;
+import com.baidu.platform.comapi.basestruct.GeoPoint;
 
 /**
  * @ClassName: MarkerOverlay
  * @Description: TODO(点标记)
- * @author jiyu
+ * @author shangjiyu
  * @date 2013-8-12 下午9:15:05
  *
  */
 public class MarkerOverlay {
-	// private GeoPoint p;
-//	List<GeoPoint> geopoints;
+	ArrayList<GeoPoint> geoPoints;
 	MapView bMapView;
-	Geometry markerGeometry;
-	Symbol markerSymbol;
-	Graphic markerGraphic;
-	GraphicsOverlay bGraphicsOverlay;
-	GeoPoint markerPositionGeoPoint;
-	long longMarkerId;
+	static Context context;
+	ItemizedOverlay<OverlayItem> itemizedOverlay;
 	
-	public MarkerOverlay (MapView bMapView, GraphicsOverlay bGraphicsOverlay, GeoPoint markerPosition){
-		this.markerPositionGeoPoint = markerPosition;
-		this.markerGeometry = new Geometry();
-		markerGeometry.setPoint(this.markerPositionGeoPoint, 3);
-		this.markerSymbol = new Symbol();
-		Symbol.Color markerColor = markerSymbol.new Color();
-		markerColor.red = 0;
-		markerColor.green = 0;
-		markerColor.blue = 0;
-		markerColor.alpha =255;
-		markerSymbol.setPointSymbol(markerColor);
-		this.markerGraphic = new Graphic(markerGeometry, markerSymbol);
+	public MarkerOverlay (MapView bMapView, Context context, Drawable marker){
 		this.bMapView = bMapView;
-		this.bGraphicsOverlay = bGraphicsOverlay;
-		this.longMarkerId = this.bGraphicsOverlay.setData(markerGraphic);
+		MarkerOverlay.context = context;
+		this.itemizedOverlay = new ItemOverlay(marker, bMapView);
+		this.bMapView.getOverlays().add(this.itemizedOverlay);
 	}
 	
 	/**
@@ -56,8 +45,13 @@ public class MarkerOverlay {
 	 * @return void    返回类型
 	 * @throws
 	 */
-	public void draw () {
-		this.bMapView.getOverlays().add(this.bGraphicsOverlay);
+	public void draw (List<GeoPoint> geoPoints) {
+		this.itemizedOverlay.removeAll();
+		List<OverlayItem> overlayItems = new ArrayList<OverlayItem>();
+		for (int i = 0; i < geoPoints.size(); i++) {
+			overlayItems.add(new OverlayItem(geoPoints.get(i), "point"+i, "point"+i));
+		}
+		this.itemizedOverlay.addItem(overlayItems);
 		this.bMapView.refresh();
 //		return this.longMarkerId;
 	}
@@ -70,7 +64,33 @@ public class MarkerOverlay {
 	 * @throws
 	 */
 	public void delete () {
-		this.bGraphicsOverlay.removeGraphic(this.longMarkerId);
+		this.itemizedOverlay.removeAll();
 		this.bMapView.refresh();
+	}
+	
+	/**
+	 * @ClassName: ItemOverlay
+	 * @Description: TODO(itemoverlay class)
+	 * @author shangjiyu
+	 * @date 2013-9-28 下午2:15:10
+	 *
+	 */
+	public class ItemOverlay extends ItemizedOverlay<OverlayItem> {
+		
+		public ItemOverlay (Drawable marker,MapView mapView) {
+			super(marker, mapView);
+		}
+		
+		protected boolean onTap(int index) {
+			//在此处理item点击事件
+			System.out.println("item onTap: "+index);
+			return true; 
+		}
+		
+		public boolean onTap (GeoPoint point,MapView mapView) {
+			//在此处理MapView的点击事件，当返回 true时  
+			super.onTap(point,mapView);
+			 return false;
+		}
 	}
 }

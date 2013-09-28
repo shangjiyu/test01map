@@ -20,8 +20,6 @@ import com.baidu.platform.comapi.basestruct.GeoPoint;
 public class LineOverlay {
 
 //	List<GeoPoint> geopoints;
-	GeoPoint[] geoPoints;
-	int size;
 	Geometry lineGeometry;
 	Symbol lineSymbol;
 	Graphic lineGraphic;
@@ -29,34 +27,31 @@ public class LineOverlay {
 	MapView bMapView;
 	long longPolylineId;
 
-	public LineOverlay(List<GeoPoint> geopoints, MapView bMapView, GraphicsOverlay bGraphicsOverlay) {
-		this.geoPoints = new GeoPoint[geopoints.size()];
-		for (int i = 0; i < geopoints.size(); i++) {
-			geoPoints[i] = geopoints.get(i);
-		}
-		this.lineGeometry = new Geometry();
-		lineGeometry.setPolyLine(geoPoints);
-		this.lineSymbol = new Symbol();
-		Symbol.Color lineColor = lineSymbol.new Color();
+	public LineOverlay(MapView bMapView) {
+		this.bMapView = bMapView;
+		this.bGraphicsOverlay = new GraphicsOverlay(this.bMapView);
+		this.bMapView.getOverlays().add(this.bGraphicsOverlay);
+	}
+	
+	public long draw (List<GeoPoint> geopoints) {
+		this.bGraphicsOverlay.removeAll();
+		final Geometry lineGeometry = new Geometry();
+		lineGeometry.setPolyLine((GeoPoint[]) geopoints.toArray(new GeoPoint[0]));
+		final Symbol lineSymbol = new Symbol();
+		final Symbol.Color lineColor = lineSymbol.new Color();
 		lineColor.red =0;
 		lineColor.green = 0;
 		lineColor.blue = 0;
 		lineColor.alpha = 255;
 		lineSymbol.setLineSymbol(lineColor, 4);
-		this.lineGraphic = new Graphic(lineGeometry, lineSymbol);
-		this.bGraphicsOverlay = bGraphicsOverlay;
-		this.bMapView = bMapView;
-		this.longPolylineId = this.bGraphicsOverlay.setData(lineGraphic);
-	}
-	
-	public long draw () {
-		this.bMapView.getOverlays().add(this.bGraphicsOverlay);
+		final Graphic lineGraphic = new Graphic(lineGeometry, lineSymbol);
+		this.bGraphicsOverlay.setData(lineGraphic);
 		this.bMapView.refresh();
 		return this.longPolylineId;
 	}
 	
 	public void delete () {
-		this.bGraphicsOverlay.removeGraphic(this.longPolylineId);
+		this.bGraphicsOverlay.removeAll();
 		this.bMapView.refresh();
 	}
 }
