@@ -3,10 +3,10 @@ package com.test01map;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -40,7 +40,6 @@ import com.baidu.mapapi.map.MKOfflineMapListener;
 import com.baidu.mapapi.map.MapController;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.platform.comapi.basestruct.GeoPoint;
-import com.test01map.MyLocationManager.LocationCallBack;
 import com.test01map.caculation.CaculationArea;
 import com.test01map.caculation.CaculationDistance;
 import com.test01map.overlay.LineOverlay;
@@ -55,7 +54,7 @@ import com.test01map.tools.Conversion;
  * @date 2013-8-12 下午9:04:10
  *
  */
-public class Main extends SherlockActivity implements LocationCallBack {
+public class Main extends SherlockActivity {
 
 	GeoPoint p, pGps;
 	Drawable marker;
@@ -66,7 +65,6 @@ public class Main extends SherlockActivity implements LocationCallBack {
 	List<PointF> listpoint = new ArrayList<PointF>();
 	List<GeoPoint> geopoints = new ArrayList<GeoPoint>();
 	List<Location> locations = new ArrayList<Location>();
-//	List<MarkerOverlay> markers = new ArrayList<MarkerOverlay>();
 	
 	BMapManager bMapManager;
 	MapView bMapView;
@@ -90,7 +88,6 @@ public class Main extends SherlockActivity implements LocationCallBack {
 
 	Boolean Polygon = false;
 
-	@SuppressLint("NewApi")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		
@@ -117,12 +114,6 @@ public class Main extends SherlockActivity implements LocationCallBack {
 				startActivity(Intent.createChooser(shareIntent, "分享到"));
 			}
 		});
-		/*ShareActionProvider mShareActionProvider = (ShareActionProvider)((MenuItem) customNav.findViewById(R.id.menu_share)).getActionProvider();
-		Intent shareIntent = new Intent();
-		shareIntent.setAction(Intent.ACTION_SEND);
-		shareIntent.putExtra(Intent.EXTRA_TEXT, "面积有："+TextArea.getText()+"距离有："+TextDistance.getText());
-		shareIntent.setType("text/plain");
-		mShareActionProvider.setShareIntent(shareIntent);*/
 		
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayShowTitleEnabled(true);
@@ -142,9 +133,8 @@ public class Main extends SherlockActivity implements LocationCallBack {
 		bMapController = bMapView.getController();
 //		取得地图控制权
 		bMapController.setZoom(15);
-//		bMapController.animateTo(new GeoPoint(120047134,30231811));
 		
-//		offline Map
+//		offLine Map Initialize
 		bOfflineMap = new MKOfflineMap();
 		bOfflineMap.init(bMapController, new MKOfflineMapListener() {
 			
@@ -268,14 +258,6 @@ public class Main extends SherlockActivity implements LocationCallBack {
 		
 		MenuInflater inflater = getSupportMenuInflater();
 		inflater.inflate(R.menu.main, menu);
-//		ShareActionProvider shareActionProvider = (ShareActionProvider) menu.findItem(R.id.menu_share).getActionProvider();
-//		shareActionProvider.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
-//		Intent shareIntent = new Intent();
-//		shareIntent.setAction(Intent.ACTION_SEND);
-//		shareIntent.setType("image/*");
-////        Uri uri = Uri.fromFile(getFileStreamPath("shared.png"));
-////        shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
-//		shareActionProvider.setShareIntent(shareIntent);
 		mapTypeToggleButton = (ToggleButton) menu.findItem(R.id.mapTypeToggleButton).getActionView();
 		mapTypeToggleButton.setTextOn("卫星");
 		mapTypeToggleButton.setTextOff("普通");
@@ -285,23 +267,10 @@ public class Main extends SherlockActivity implements LocationCallBack {
 				// TODO Auto-generated method stub
 				if (!isChecked) {
 					bMapView.setSatellite(false);
-//					if (!geopoints.isEmpty()) {
-//						listpoint.removeAll(listpoint);
-//						geopoints.removeAll(geopoints);
-//						markers.delete();
-//						overlayAndtextShow();
-//					}
 				} else {
 					bMapView.setSatellite(true);
-//					if (!geopoints.isEmpty()) {
-//						listpoint.removeAll(listpoint);
-//						geopoints.removeAll(geopoints);
-//						markers.delete();
-//						overlayAndtextShow();
-//					}
 				}
 				overlayAndtextShow();
-//				bMapView.refresh();
 			}
 		});
 		mapTypeToggleButton.setChecked(false);
@@ -318,11 +287,8 @@ public class Main extends SherlockActivity implements LocationCallBack {
 				} else {
 //					buttonView.setText("计算面积");
 					Polygon = true;
-//					dStr = Conversion.ConversionA(CaculationArea.calculateArea(listpoint));
-//					TextArea.setText("A:" + dStr);
 				}
 				overlayAndtextShow();
-//				bMapView.refresh();
 			}
 		});
 		areaToggleButton.setChecked(false);
@@ -377,7 +343,6 @@ public class Main extends SherlockActivity implements LocationCallBack {
 				}
 			}
 		});
-//		System.out.println("menu created");
 		return true;
 	}
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
@@ -407,10 +372,13 @@ public class Main extends SherlockActivity implements LocationCallBack {
 		return super.onOptionsItemSelected(item);
 	}
 
-	protected boolean isRouteDisplayed() {
-		return false;
-	}
-
+	/**
+	 * @Title: setOnMapClickListener
+	 * @Description: TODO(设置手动去点还是GPS定位，有aciton bar的button调用)
+	 * @param @param flag    设定文件
+	 * @return void    返回类型
+	 * @throws
+	 */
 	public void setOnMapClickListener(boolean flag) {
 		if (flag) {
 			MKMapTouchListener mapTouchListener = new MKMapTouchListener() {
@@ -430,7 +398,7 @@ public class Main extends SherlockActivity implements LocationCallBack {
 				@Override
 				public void onMapClick(GeoPoint geoPoint) {
 					// TODO Auto-generated method stub
-					System.out.println(geoPoint);
+//					System.out.println(geoPoint);
 			        int xx = geoPoint.getLongitudeE6();  
 			        int yy = geoPoint.getLatitudeE6();
 			        pointFGps = new PointF(yy, xx);
@@ -449,31 +417,22 @@ public class Main extends SherlockActivity implements LocationCallBack {
 		
 	}
 
-	public void onCurrentLocation(Location locationGps) {
-
-		pGps = new GeoPoint((int) (locationGps.getLatitude() * 1E6),
-				(int) (locationGps.getLongitude() * 1E6));
-//		pGps = new LatLng((locationGps.getLatitude()),(locationGps.getLongitude()));
-//		mapController.animateTo(pGps);
-		pointFGps = new PointF(pGps.getLatitudeE6(), pGps.getLongitudeE6());
-//		pointFGps = new PointF((float)(pGps.latitude*1E6),(float)(pGps.longitude*1E6));
-		listpoint.add(pointFGps);
-		geopoints.add(pGps);
-//		markers.add(new MarkerOverlay(bMapView,bGraphicsOverlay, pGps));
-		bMapView.getController().animateTo(pGps);
-		overlayAndtextShow();
-	}
-
+	/**
+	 * @Title: overlayAndtextShow
+	 * @Description: TODO(update the map overlays)
+	 * @param     设定文件
+	 * @return void    返回类型
+	 * @throws
+	 */
 	public void overlayAndtextShow() {
 		if (geopoints.isEmpty()) {
 			if (polyline != null) {
 				polyline.delete();
-				System.out.println("-polyline");
+//				System.out.println("delete polyline");
 			}
 			if (polygon != null) {
 				polygon.delete();
-				System.out.println("-polygon");
-//				polygon = null;
+//				System.out.println("delete polygon");
 			}
 			if (markers != null) {
 				markers.delete();
@@ -483,39 +442,34 @@ public class Main extends SherlockActivity implements LocationCallBack {
 		}else {
 			if (markers != null) {
 				markers.draw(geopoints);
-				System.out.println("+marker");
+//				System.out.println("update marker");
 			}else {
 				markers = new MarkerOverlay(bMapView, getApplicationContext(), marker);
 				markers.draw(geopoints);
+//				System.out.println("update marker");
 			}
 			if (polyline != null) {
-				System.out.println("-polyline");
 				polyline.draw(geopoints);
-				System.out.println("+polyline");
+//				System.out.println("update polyLine");
 			}else {
 				polyline = new LineOverlay(bMapView);
 				polyline.draw(geopoints);
-				
+//				System.out.println("update polyLine");
 			}
 			if (Polygon) {
 				if (geopoints.size() > 2) {
 					if (polygon != null) {
-//						polygon.delete();
-//						System.out.println("-polygon");
-//						polygon = null;
-//						polygon = new PolygonOverlay(geopoints, bMapView, bGraphicsOverlay);
 						polygon.draw(geopoints);
-						System.out.println("+polygon");
+//						System.out.println("update polygon");
 					}else {
 						polygon = new PolygonOverlay(bMapView);
 						polygon.draw(geopoints);
-						System.out.println("+polygon");
+//						System.out.println("update polygon");
 					}
 				}else {
 					if (polygon != null) {
 						polygon.delete();
-						System.out.println("-polygon");
-//						polygon = null;
+//						System.out.println("delete polygon");
 					}
 				}
 				dStr = Conversion.ConversionA(CaculationArea.calculateArea(listpoint));
@@ -572,23 +526,38 @@ public class Main extends SherlockActivity implements LocationCallBack {
 		super.onResume();
 	}
 	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		switch (this.getResources().getConfiguration().orientation) {
+		case Configuration.ORIENTATION_LANDSCAPE:break;
+		case Configuration.ORIENTATION_PORTRAIT:break;
+//		case Configuration.ORIENTATION_SQUARE:break;
+		case Configuration.ORIENTATION_UNDEFINED:break;
+		default:
+			break;
+		}
+	}
+	/**
+	 * @ClassName: TestLocationListener
+	 * @Description: TODO(百度定位sdk的定位结果事件监听类)
+	 * @author jiyu
+	 * @date 2013-9-29 下午7:55:58
+	 *
+	 */
 	public class TestLocationListener implements BDLocationListener {
 
 		public void onReceiveLocation(BDLocation location) {
 			// TODO Auto-generated method stub
-			System.out.println(location.getLocType());
-//			if (location == null) {
-//				return;
-//			}
+//			System.out.println(location.getLocType());
+			if (location == null) {
+				return;
+			}
 			pGps = new GeoPoint((int) (location.getLatitude() * 1E6),
 					(int) (location.getLongitude() * 1E6));
-//			pGps = new LatLng((locationGps.getLatitude()),(locationGps.getLongitude()));
-//			mapController.animateTo(pGps);
 			pointFGps = new PointF(pGps.getLatitudeE6(), pGps.getLongitudeE6());
-//			pointFGps = new PointF((float)(pGps.latitude*1E6),(float)(pGps.longitude*1E6));
 			listpoint.add(pointFGps);
 			geopoints.add(pGps);
-//			markers.add(new MarkerOverlay(bMapView, bGraphicsOverlay, pGps));
 			bMapView.getController().animateTo(pGps);
 			overlayAndtextShow();
 		}
