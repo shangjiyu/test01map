@@ -59,7 +59,7 @@
     	<activity
             android:name=".Main"
             android:screenOrientation="sensor"
-            android:configChanges="orientation|keyboardHidden"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_main"
             android:uiOptions="splitActionBarWhenNarrow" >
             <intent-filter>

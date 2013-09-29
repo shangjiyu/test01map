@@ -530,7 +530,9 @@ public class Main extends SherlockActivity {
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		switch (this.getResources().getConfiguration().orientation) {
-		case Configuration.ORIENTATION_LANDSCAPE:break;
+		case Configuration.ORIENTATION_LANDSCAPE:
+			getSupportActionBar().getCustomView().findViewById(R.id.menu_share).setVisibility(View.GONE);
+			break;
 		case Configuration.ORIENTATION_PORTRAIT:break;
 //		case Configuration.ORIENTATION_SQUARE:break;
 		case Configuration.ORIENTATION_UNDEFINED:break;
