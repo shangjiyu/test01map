@@ -8,11 +8,19 @@
     <string name="area">A:0sq.m</string>
     <string name="start">启动服务</string>
     <string name="stop">停止服务</string>
-    <string name="exit">exit</string>
-    <string name="clearButton">清除</string>
+    <string name="exit">退出程序</string>
+    <string name="clearButton">清空</string>
     <string name="redoButton">重画</string>
     <string name="areaToggleButton">areaToggleButton</string>
     <string name="mapTypeToggleButton">MTT</string>
     <string name="manulyToggleButton">manulyToggleButton</string>
+    <string name="calculateArea">计算面积</string>
+    <string name="calculateDist">计算距离</string>
+    <string name="vectorMapType">矢量地图</string>
+    <string name="satelliteMapType">卫星地图</string>
+    <string name="manuPoint">手动取点</string>
+    <string name="GPSPoint">卫星定位</string>
+    <string name="clearAll">清空地图</string>
+    <string name="redraw">clearLast</string>
 
 </resources>

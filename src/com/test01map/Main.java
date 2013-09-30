@@ -24,7 +24,6 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
@@ -40,7 +39,8 @@ import com.baidu.mapapi.map.MKOfflineMapListener;
 import com.baidu.mapapi.map.MapController;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.platform.comapi.basestruct.GeoPoint;
-import com.slidingmenu.lib.SlidingMenu;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
 import com.test01map.caculation.CaculationArea;
 import com.test01map.caculation.CaculationDistance;
 import com.test01map.overlay.LineOverlay;
@@ -55,7 +55,7 @@ import com.test01map.tools.Conversion;
  * @date 2013-8-12 下午9:04:10
  *
  */
-public class Main extends SherlockActivity {
+public class Main extends SlidingActivity {
 
 	GeoPoint p, pGps;
 	Drawable marker;
@@ -97,6 +97,7 @@ public class Main extends SherlockActivity {
 		
 		bMapManager = new BMapManager(getApplication());
 		bMapManager.init("3164354232f7313b61bd70dfc5b58145", null);
+		setBehindContentView(R.layout.slidingmenu);
 		setContentView(R.layout.main);
 		
 		TextDistance = (TextView)findViewById(R.id.Distance);
@@ -118,15 +119,19 @@ public class Main extends SherlockActivity {
 		
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayShowTitleEnabled(true);
+		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setCustomView(customNav);
 		actionBar.setDisplayShowCustomEnabled(true);
+//		setSlidingActionBarEnabled(true);
 //		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME|ActionBar.DISPLAY_SHOW_CUSTOM);
 		
 //		slidingmenu
-		SlidingMenu sm = new SlidingMenu(this.getApplicationContext());
+		SlidingMenu sm = getSlidingMenu();
 		sm.setMode(SlidingMenu.LEFT);
-		sm.setFadeDegree(0.35f); //颜色渐变比例
-		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN); //拉动事件区域  --全屏
+		sm.setShadowWidth(R.dimen.shadow_width);
+		sm.setBehindOffset(R.dimen.slidingmenu_offset);
+		sm.setFadeDegree(0.35f); 
+		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
 		
 		bMapView = (MapView) findViewById(R.id.bmapsView);
 		bMapView.setBuiltInZoomControls(true);
@@ -374,6 +379,9 @@ public class Main extends SherlockActivity {
 					}
 				}).create();
 			alertbBuilder.show();
+			break;
+		case android.R.id.home:
+			toggle();
 			break;
 		}
 		return super.onOptionsItemSelected(item);
