@@ -40,6 +40,7 @@ import com.baidu.mapapi.map.MKOfflineMapListener;
 import com.baidu.mapapi.map.MapController;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.platform.comapi.basestruct.GeoPoint;
+import com.slidingmenu.lib.SlidingMenu;
 import com.test01map.caculation.CaculationArea;
 import com.test01map.caculation.CaculationDistance;
 import com.test01map.overlay.LineOverlay;
@@ -120,6 +121,12 @@ public class Main extends SherlockActivity {
 		actionBar.setCustomView(customNav);
 		actionBar.setDisplayShowCustomEnabled(true);
 //		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME|ActionBar.DISPLAY_SHOW_CUSTOM);
+		
+//		slidingmenu
+		SlidingMenu sm = new SlidingMenu(this.getApplicationContext());
+		sm.setMode(SlidingMenu.LEFT);
+		sm.setFadeDegree(0.35f); //颜色渐变比例
+		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN); //拉动事件区域  --全屏
 		
 		bMapView = (MapView) findViewById(R.id.bmapsView);
 		bMapView.setBuiltInZoomControls(true);
@@ -533,8 +540,9 @@ public class Main extends SherlockActivity {
 		case Configuration.ORIENTATION_LANDSCAPE:
 			getSupportActionBar().getCustomView().findViewById(R.id.menu_share).setVisibility(View.GONE);
 			break;
-		case Configuration.ORIENTATION_PORTRAIT:break;
-//		case Configuration.ORIENTATION_SQUARE:break;
+		case Configuration.ORIENTATION_PORTRAIT:
+			getSupportActionBar().getCustomView().findViewById(R.id.menu_share).setVisibility(View.VISIBLE);
+			break;
 		case Configuration.ORIENTATION_UNDEFINED:break;
 		default:
 			break;
