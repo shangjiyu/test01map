@@ -11,6 +11,8 @@ import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,7 +42,7 @@ import com.baidu.mapapi.map.MapController;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.platform.comapi.basestruct.GeoPoint;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
-import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
+import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 import com.test01map.caculation.CaculationArea;
 import com.test01map.caculation.CaculationDistance;
 import com.test01map.overlay.LineOverlay;
@@ -55,7 +57,7 @@ import com.test01map.tools.Conversion;
  * @date 2013-8-12 下午9:04:10
  *
  */
-public class Main extends SlidingActivity {
+public class Main extends SlidingFragmentActivity {
 
 	GeoPoint p, pGps;
 	Drawable marker;
@@ -97,8 +99,24 @@ public class Main extends SlidingActivity {
 		
 		bMapManager = new BMapManager(getApplication());
 		bMapManager.init("3164354232f7313b61bd70dfc5b58145", null);
-		setBehindContentView(R.layout.slidingmenu);
 		setContentView(R.layout.main);
+		
+//		sliding menu
+		setBehindContentView(R.layout.slidingmenu);
+		
+		FragmentTransaction t = this.getSupportFragmentManager().beginTransaction();
+		ListFragment mFrag = new SlidingmenuFragment();
+		t.replace(R.id.slidingmenu, mFrag);
+		t.commit();
+		
+		SlidingMenu sm = getSlidingMenu();
+		sm.setMode(SlidingMenu.LEFT);
+		sm.setShadowWidth(R.dimen.shadow_width);
+		sm.setShadowDrawable(R.drawable.shadow);
+		sm.setBehindOffset(R.dimen.slidingmenu_offset);
+		sm.setFadeDegree(0.35f); 
+		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
+		setSlidingActionBarEnabled(false);
 		
 		TextDistance = (TextView)findViewById(R.id.Distance);
 		TextArea = (TextView)findViewById(R.id.Area);
@@ -122,16 +140,7 @@ public class Main extends SlidingActivity {
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setCustomView(customNav);
 		actionBar.setDisplayShowCustomEnabled(true);
-//		setSlidingActionBarEnabled(true);
 //		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME|ActionBar.DISPLAY_SHOW_CUSTOM);
-		
-//		slidingmenu
-		SlidingMenu sm = getSlidingMenu();
-		sm.setMode(SlidingMenu.LEFT);
-		sm.setShadowWidth(R.dimen.shadow_width);
-		sm.setBehindOffset(R.dimen.slidingmenu_offset);
-		sm.setFadeDegree(0.35f); 
-		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
 		
 		bMapView = (MapView) findViewById(R.id.bmapsView);
 		bMapView.setBuiltInZoomControls(true);
