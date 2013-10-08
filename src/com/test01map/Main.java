@@ -17,9 +17,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +42,7 @@ import com.baidu.mapapi.map.MapController;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.platform.comapi.basestruct.GeoPoint;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.OnOpenListener;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 import com.test01map.caculation.CaculationArea;
 import com.test01map.caculation.CaculationDistance;
@@ -103,12 +104,10 @@ public class Main extends SlidingFragmentActivity {
 		
 //		sliding menu
 		setBehindContentView(R.layout.slidingmenu);
-		
-		FragmentTransaction t = this.getSupportFragmentManager().beginTransaction();
+		FragmentTransaction t = getSupportFragmentManager().beginTransaction();
 		ListFragment mFrag = new SlidingmenuFragment();
 		t.replace(R.id.slidingmenu, mFrag);
 		t.commit();
-		
 		SlidingMenu sm = getSlidingMenu();
 		sm.setMode(SlidingMenu.LEFT);
 		sm.setShadowWidth(R.dimen.shadow_width);
