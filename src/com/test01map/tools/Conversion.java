@@ -26,6 +26,19 @@ public class Conversion {
 		return mOrkm;
 	}
 	
+	public static String conversationBaiduD(double d) {
+		DecimalFormat dt = (DecimalFormat) DecimalFormat.getInstance();
+		dt.applyPattern("0");
+		double i = d;
+		String mOrkm = dt.format(i) + "m";
+		if (d > 1000) {
+			dt.applyPattern("0.00");
+			i = i/1000;
+			mOrkm = dt.format(i) + "km";; 
+		}
+		return mOrkm;
+	}
+	
 	public static String ConversionA(double nub){
 		//转换面积
 		DecimalFormat dt=(DecimalFormat) DecimalFormat.getInstance(); 

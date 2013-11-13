@@ -487,10 +487,10 @@ public class Main extends SherlockActivity {
 					areaPointFs.add(listpoint.get(0));
 				}
 				dStr = Conversion
-						.ConversionD(CaculationDistance.getDistance(areaPointFs));
+						.conversationBaiduD(CaculationDistance.getBaiduDistance(geopoints));
 			}else {
 				dStr = Conversion
-						.ConversionD(CaculationDistance.getDistance(listpoint));
+						.conversationBaiduD(CaculationDistance.getBaiduDistance(geopoints));
 			}
 			TextDistance.setText("D:" + dStr);
 		}
