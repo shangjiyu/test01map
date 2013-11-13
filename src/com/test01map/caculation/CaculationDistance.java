@@ -2,11 +2,22 @@ package com.test01map.caculation;
 
 import java.util.List;
 
+import com.baidu.mapapi.utils.DistanceUtil;
+import com.baidu.platform.comapi.basestruct.GeoPoint;
+
 import android.graphics.PointF;
 
 public class CaculationDistance {
 
 	
+	/********************************************************
+	 * @Title: getDistance
+	 * @Description: TODO(显示屏坐标计算距离)
+	 * @param @param listPointFs
+	 * @param @return    设定文件
+	 * @return int    返回类型
+	 * @throws
+	 */
 	public static int getDistance(List<PointF> listPointFs) {
 		int size = listPointFs.size();
 		int distance = 0;
@@ -28,5 +39,21 @@ public class CaculationDistance {
 			distance = (int)(s + distance);
 		}
 		return distance;
+	}
+	
+	/********************************************************
+	 * @Title: getBaiduDistance
+	 * @Description: TODO(百度给点计算距离接口)
+	 * @param @param geoPoints
+	 * @param @return    设定文件
+	 * @return double    返回类型
+	 * @throws
+	 */
+	public static double getBaiduDistance(List<GeoPoint> geoPoints) {
+		double dis = 0.0;
+		for (int i = 0; i < geoPoints.size()-1; i++) {
+			dis = dis+DistanceUtil.getDistance(geoPoints.get(i), geoPoints.get(i+1));
+		}
+		return dis;
 	}
 }
