@@ -7,6 +7,7 @@ import com.baidu.mapapi.map.Graphic;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.GraphicsOverlay;
 import com.baidu.mapapi.map.Symbol;
+import com.baidu.mapapi.map.Symbol.Stroke;
 import com.baidu.platform.comapi.basestruct.GeoPoint;
 
 public class PolygonOverlay {
@@ -30,7 +31,8 @@ public class PolygonOverlay {
 		polygonColor.green = 255;
 		polygonColor.blue = 0;
 		polygonColor.alpha = 126;
-		polygonSymbol.setSurface(polygonColor, 1, 4);
+		final Stroke polygonStroke = new Stroke(1, polygonColor);
+		polygonSymbol.setSurface(polygonColor, 1, 4, polygonStroke);
 		final Graphic polygonGraphic = new Graphic(polygonGeometry, polygonSymbol);
 		final long longPolygonId = this.bGraphicsOverlay.setData(polygonGraphic);
 		this.bMapView.refresh();
