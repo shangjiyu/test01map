@@ -1,5 +1,7 @@
 project.properties
 *.class
+*.classpath
+*.apk
 /AndroidManifest.xml
 /doc
 /gen
