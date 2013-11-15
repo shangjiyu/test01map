@@ -533,8 +533,9 @@ public class Main extends SherlockActivity {
 		case Configuration.ORIENTATION_LANDSCAPE:
 			getSupportActionBar().getCustomView().findViewById(R.id.menu_share).setVisibility(View.GONE);
 			break;
-		case Configuration.ORIENTATION_PORTRAIT:break;
-//		case Configuration.ORIENTATION_SQUARE:break;
+		case Configuration.ORIENTATION_PORTRAIT:
+			getSupportActionBar().getCustomView().findViewById(R.id.menu_share).setVisibility(View.VISIBLE);
+			break;
 		case Configuration.ORIENTATION_UNDEFINED:break;
 		default:
 			break;
