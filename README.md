@@ -1,6 +1,4 @@
-This Is An Android Tool Application
-for Land Area and Route Mileage Measurement
-Based on Location Services
+This Is An Android Tool Application for Land Area and Route Mileage Measurement Based on Location Services
 ====================================================
 
 this is a project for bachelor graduation and code for fun
